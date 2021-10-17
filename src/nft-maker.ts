@@ -1,4 +1,5 @@
 import path from 'path';
+import { cwd } from 'process';
 import fs from 'fs';
 import sha1 from 'sha1';
 import { createCanvas, loadImage, Image } from 'canvas';
@@ -34,7 +35,7 @@ const {
   outputJsonFileName,
 } = config;
 
-const basePath = process.cwd();
+const basePath = cwd();
 const buildDir = `${basePath}/${outputDirName}`;
 const layersDir = `${basePath}/${layersDirName}`;
 

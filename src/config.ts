@@ -1,7 +1,8 @@
 import { cosmiconfigSync } from 'cosmiconfig';
+import { cwd, exit } from 'process';
 
 const explorerSync = cosmiconfigSync('nftartmaker');
-const customConfig = explorerSync.search(process.cwd());
+const customConfig = explorerSync.search(cwd());
 
 // You can switch between default png files and encoded SVG source
 const svgBase64DataOnly =
@@ -16,7 +17,7 @@ if (!layerConfigurations) {
   console.log(
     'You have to configure layers first. See the docs on how to do it. You can also provide other settings in the config file.'
   );
-  process.exit(9);
+  exit(9);
 }
 
 // Width and height of the image

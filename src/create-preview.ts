@@ -1,9 +1,10 @@
-const basePath = process.cwd();
+import { cwd } from 'process';
 import fs from 'fs';
 import { createCanvas, loadImage, Image } from 'canvas';
-const buildDir = `${basePath}/output`;
-
 import config from './config';
+
+const basePath = cwd();
+const buildDir = `${basePath}/output`;
 
 export const executePreviewGeneration = () => {
   // read json data
