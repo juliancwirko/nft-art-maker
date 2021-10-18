@@ -56,7 +56,7 @@ You should use the config file at least for layers configuration. But there are 
 
 ##### layers configuration
 
-Every subdirectory in your `layers` directory should be named after the type of the layer, and inside, you should put your png files. The name structure should be as follows: `filename1#100.png`, which means this part isn't so rare. You can set numbers from 0 to 100, and if you need every detail in every image, all should have 100. 
+Every subdirectory in your `layers` directory should be named after the type of the layer, and inside, you should put your png files. The name structure should be as follows: `filename1#100.png`, which means this part isn't so rare.
 
 ##### Output type configuration
 
