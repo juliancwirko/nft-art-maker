@@ -2,6 +2,8 @@
 
 The tool generates a randomized set of images or encoded SVGs from provided PNG layers.
 
+- [Quick demo (video)](https://youtu.be/uU10k6q79P8)
+
 #### Based on:
 - [HashLips art engine](https://github.com/HashLips/hashlips_art_engine) - only main functionality
 - [Pixels to SVG](https://codepen.io/shshaw/pen/XbxvNj) - SVG code from images
@@ -29,8 +31,8 @@ You should use the config file at least for layers configuration. But there are 
   "layerConfigurations": [
     {
       "growEditionSizeTo": 100,
-      "layersOrder": [{ "name": "face" }, { "name": "head" }, { "name": "eyes" }],
-    },
+      "layersOrder": [{ "name": "face" }, { "name": "head" }, { "name": "eyes" }]
+    }
   ],
   "format": {
     "width": 20,
