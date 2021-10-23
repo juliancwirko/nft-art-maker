@@ -1,9 +1,10 @@
 import path from 'path';
 import { cwd } from 'process';
 import fs from 'fs';
-import sha1 from 'sha1';
+import { createHash } from 'crypto';
 import { createCanvas, loadImage, Image } from 'canvas';
 import { imgToSvg } from './img-to-svg';
+import { optimize } from 'svgo';
 import config from './config';
 
 interface LayerElement {
@@ -21,6 +22,19 @@ interface Layer {
   opacity: number;
 }
 
+interface TempMetadata {
+  dna: string;
+  name: string;
+  description: string;
+  image: string;
+  edition: number;
+  date: number;
+  attributes: {
+    trait_type: string;
+    value: string;
+  }[];
+}
+
 const {
   format,
   description,
@@ -33,6 +47,7 @@ const {
   outputJsonDirName,
   outputImagesDirName,
   outputJsonFileName,
+  editionNameFormat,
 } = config;
 
 const basePath = cwd();
@@ -42,7 +57,7 @@ const layersDir = `${basePath}/${layersDirName}`;
 const canvas = createCanvas(format.width, format.height);
 const ctx = canvas.getContext('2d');
 
-const metadataList: { edition: number }[] = [];
+const metadataList: TempMetadata[] = [];
 let attributesList: { trait_type: string; value: string }[] = [];
 const dnaList: string[][] = [];
 
@@ -111,19 +126,34 @@ const saveImage = (_editionCount: number) => {
 };
 
 const addMetadata = (_dna: string[], _edition: number) => {
+  const hash = createHash('sha256');
+
+  const image = svgBase64DataOnly
+    ? imgToSvg(ctx.getImageData(0, 0, format.width, format.height))
+    : `${_edition}.png`;
+
+  const dataToHash = svgBase64DataOnly
+    ? optimize(image, { multipass: true }).data
+    : canvas.toBuffer('image/png');
+
+  hash.update(dataToHash);
+
   const dateTime = Date.now();
+
   const tempMetadata = {
-    dna: sha1(_dna.join('')),
-    name: `#${_edition}`,
+    dna: hash.digest('hex'),
+    name: `${editionNameFormat}${_edition}`,
     description: description,
     image: svgBase64DataOnly
-      ? imgToSvg(ctx.getImageData(0, 0, format.width, format.height))
-      : `${_edition}.png`,
+      ? optimize(image, { multipass: true, datauri: 'base64' }).data
+      : image,
     edition: _edition,
     date: dateTime,
     attributes: attributesList,
   };
+
   metadataList.push(tempMetadata);
+
   attributesList = [];
 };
 
@@ -207,6 +237,15 @@ const writeMetaData = (_data: string) => {
   );
 };
 
+const getProvenanceHash = () => {
+  const hash = createHash('sha256');
+
+  const hashes = metadataList.map((metadataObj) => metadataObj.dna).join('');
+  hash.update(hashes);
+
+  return hash.digest('hex');
+};
+
 export const startCreating = async () => {
   let layerConfigIndex = 0;
   let editionCount = 1;
@@ -258,11 +297,7 @@ export const startCreating = async () => {
           });
           !svgBase64DataOnly && saveImage(abstractedIndexes[0]);
           addMetadata(newDna, abstractedIndexes[0]);
-          console.log(
-            `Created edition: ${abstractedIndexes[0]}, with DNA: ${sha1(
-              newDna.join('')
-            )}`
-          );
+          console.log(`Created edition: ${abstractedIndexes[0]}`);
         });
         dnaList.push(newDna);
         editionCount++;
@@ -279,5 +314,11 @@ export const startCreating = async () => {
     }
     layerConfigIndex++;
   }
-  writeMetaData(JSON.stringify(metadataList, null, 2));
+
+  const metadata = {
+    editions: metadataList,
+    provenanceHash: getProvenanceHash(),
+  };
+
+  writeMetaData(JSON.stringify(metadata, null, 2));
 };

@@ -45,6 +45,8 @@ const outputImagesDirName =
 const outputJsonFileName =
   customConfig?.config?.outputJsonFileName || 'metadata.json';
 
+const editionNameFormat = customConfig?.config?.editionNameFormat || '#';
+
 // Parameters for the preview file
 const preview = customConfig?.config?.preview || {
   thumbPerRow: 20,
@@ -66,6 +68,7 @@ const config = {
   outputJsonDirName,
   outputImagesDirName,
   outputJsonFileName,
+  editionNameFormat,
 };
 
 export default config;

@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-this-alias */
-import { optimize } from 'svgo';
-
 interface Img {
   data: Uint8ClampedArray;
   width: number;
@@ -126,7 +123,5 @@ export const imgToSvg = (img: Img) => {
 
   const colors = getColors(img);
   const paths = colorsToPaths(colors);
-  const output = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 -0.5 ${img.width} ${img.height}' shape-rendering='crispEdges'>${paths}</svg>`;
-
-  return optimize(output, { multipass: true, datauri: 'base64' }).data;
+  return `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 -0.5 ${img.width} ${img.height}' shape-rendering='crispEdges'>${paths}</svg>`;
 };

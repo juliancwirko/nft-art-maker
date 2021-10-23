@@ -8,6 +8,6 @@ esbuild
     minify: true,
     outdir: 'build',
     platform: 'node',
-    external: ['canvas', 'sha1', 'svgo', 'cosmiconfig'],
+    external: ['canvas', 'svgo', 'cosmiconfig'],
   })
   .catch(() => process.exit(1));
