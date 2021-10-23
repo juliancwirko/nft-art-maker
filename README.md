@@ -81,7 +81,7 @@ The example of output `metadata.json` file structure with empty values:
         },
       ]
   }],
-  "provenanceHash": ''
+  "provenanceHash": ""
 }
 ```
 
