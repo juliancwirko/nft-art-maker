@@ -2,7 +2,9 @@
 
 The tool generates a randomized set of images or encoded SVGs from provided PNG layers.
 
-- [Quick demo (video)](https://youtu.be/uU10k6q79P8)
+#### Demo vids:
+- [v2.0](https://youtu.be/A_Qw9SLVT6M)
+- [v1.0](https://youtu.be/uU10k6q79P8)
 
 #### Based on:
 - [HashLips art engine](https://github.com/HashLips/hashlips_art_engine) - only main functionality (output metadata.json is not standarized in any way)
