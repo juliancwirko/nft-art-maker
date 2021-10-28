@@ -1,5 +1,5 @@
 ### [2.1.0](https://github.com/juliancwirko/create-harold-app/releases/tag/v2.1.0) (2021-10-28)
-- bring back `shuffleLayerConfigurations` it has a valid use case even if we wan't only basic fuctionality
+- bring back `shuffleLayerConfigurations` it has a valid use case even if we want only basic functionality
 - fix for preview generation
 
 ### [2.0.0](https://github.com/juliancwirko/create-harold-app/releases/tag/v2.0.0) (2021-10-23)
