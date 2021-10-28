@@ -1,5 +1,5 @@
 import path from 'path';
-import { cwd } from 'process';
+import { cwd, exit } from 'process';
 import fs from 'fs';
 import { createHash } from 'crypto';
 import { createCanvas, loadImage, Image } from 'canvas';
@@ -48,6 +48,7 @@ const {
   outputImagesDirName,
   outputJsonFileName,
   editionNameFormat,
+  shuffleLayerConfigurations,
 } = config;
 
 const basePath = cwd();
@@ -246,17 +247,49 @@ const getProvenanceHash = () => {
   return hash.digest('hex');
 };
 
+const shuffle = (array: number[]) => {
+  let currentIndex = array.length,
+    randomIndex;
+  while (currentIndex != 0) {
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+    [array[currentIndex], array[randomIndex]] = [
+      array[randomIndex],
+      array[currentIndex],
+    ];
+  }
+  return array;
+};
+
+const checkLayersGrowSizeConfigValidity = (array: number[]) =>
+  array.slice(1).every((e, i) => e > array[i]);
+
 export const startCreating = async () => {
   let layerConfigIndex = 0;
   let editionCount = 1;
   let failedCount = 0;
-  const abstractedIndexes: number[] = [];
+  let abstractedIndexes: number[] = [];
+  if (
+    !checkLayersGrowSizeConfigValidity(
+      layerConfigurations.map(
+        (item: { growEditionSizeTo: number }) => item.growEditionSizeTo
+      )
+    )
+  ) {
+    console.log(
+      "Your 'layerConfiguration' is not valid. Please check if 'growEditionSizeTo' are ascending numbers."
+    );
+    exit();
+  }
   for (
     let i = 1;
     i <= layerConfigurations[layerConfigurations.length - 1].growEditionSizeTo;
     i++
   ) {
     abstractedIndexes.push(i);
+  }
+  if (shuffleLayerConfigurations) {
+    abstractedIndexes = shuffle(abstractedIndexes);
   }
   while (layerConfigIndex < layerConfigurations.length) {
     const layers = layersSetup(

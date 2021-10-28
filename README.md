@@ -20,6 +20,8 @@ This lib is a customized and simplified version of the [HashLips art engine](htt
 
 You can also install it globally by `npm install nft-art-maker -g` and then use it like `nft-art-maker generate`.
 
+Updating: when using npx make sure that it takes the new version. You can always install it globally using `npm install nft-art-maker@latest -g`.
+
 #### Configuration options
 
 You should use the config file at least for layers configuration. But there are also other configuration options. Whole config example: 
@@ -29,11 +31,18 @@ You should use the config file at least for layers configuration. But there are 
   "description": "Your collection name",
   "svgBase64DataOnly": true,
   "layerConfigurations": [
+    // 100 artworks
     {
       "growEditionSizeTo": 100,
       "layersOrder": [{ "name": "face" }, { "name": "head" }, { "name": "eyes" }]
+    },
+    // additional 10 artworks with pinky face
+    {
+      "growEditionSizeTo": 110,
+      "layersOrder": [{ "name": "pinkyFace" }, { "name": "head" }, { "name": "eyes" }]
     }
   ],
+  "shuffleLayerConfigurations": false,
   "format": {
     "width": 20,
     "height": 20
@@ -59,6 +68,10 @@ You should use the config file at least for layers configuration. But there are 
 
 Every subdirectory in your `layers` directory should be named after the type of the layer, and inside, you should put your png files. The name structure should be as follows: `filename1#100.png`, which means this part isn't rare.
 
+##### shuffleLayerConfigurations
+
+Disabled by default, but you can always enable it to shuffle items from different `layerConfigurations`.
+
 ##### Output type configuration
 
 You can decide if you want to have encoded SVGs or standard PNGs files. Use `svgBase64DataOnly` setting. This is what differentiates this library from HashLips.
@@ -68,18 +81,18 @@ The example of output `metadata.json` file structure with empty values:
 ```json
 {
   "editions": [{
-    "dna": "",
-      "name": "",
-      "description": "",
-      "image": "",
-      "edition": 0,
-      "date": 0,
-      "attributes": [
-        {
-          "trait_type": "",
-          "value": ""
-        },
-      ]
+  "dna": "",
+    "name": "",
+    "description": "",
+    "image": "",
+    "edition": 0,
+    "date": 0,
+    "attributes": [
+      {
+        "trait_type": "",
+        "value": ""
+      },
+    ]
   }],
   "provenanceHash": ""
 }

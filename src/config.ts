@@ -47,6 +47,9 @@ const outputJsonFileName =
 
 const editionNameFormat = customConfig?.config?.editionNameFormat || '#';
 
+const shuffleLayerConfigurations =
+  customConfig?.config?.shuffleLayerConfigurations || false;
+
 // Parameters for the preview file
 const preview = customConfig?.config?.preview || {
   thumbPerRow: 20,
@@ -69,6 +72,7 @@ const config = {
   outputImagesDirName,
   outputJsonFileName,
   editionNameFormat,
+  shuffleLayerConfigurations,
 };
 
 export default config;
