@@ -28,7 +28,7 @@ Updating: when using npx make sure that it takes the new version. You can always
 
 You should use the config file at least for layers configuration. But there are also other configuration options. Whole config example: 
 
-```json
+```javascript
 {
   "description": "Your collection name",
   "svgBase64DataOnly": true,
