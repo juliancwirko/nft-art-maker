@@ -2,6 +2,8 @@
 
 The tool generates a randomized set of images or encoded SVGs from provided PNG layers.
 
+Please test it before using it for the real stuff. It can always be buggy and blockchain doesn't forget anything.
+
 #### Demo vids:
 - [v2.0](https://youtu.be/A_Qw9SLVT6M)
 - [v1.0](https://youtu.be/uU10k6q79P8)
@@ -19,6 +21,7 @@ This lib is a customized and simplified version of the [HashLips art engine](htt
 - create a configuration file `touch .nftartmakerrc` (other file names also allowed, check out [cosmiconfig](https://github.com/davidtheclark/cosmiconfig) for more info). This file should be a JSON formatted config file. You'll find all configuration options below.
 - run `npx nft-art-maker generate`
 - you can also generate preview - run `npx nft-art-maker preview`
+- you can update your base path for images - run `npx nft-art-maker updateImgPaths` it will take it from the configuration file, from `baseImgUri`. Useful when you need to update your paths after uploading, for example, when uploading a CAR file using IPFS.
 
 You can also install it globally by `npm install nft-art-maker -g` and then use it like `nft-art-maker generate`.
 
@@ -62,7 +65,8 @@ You should use the config file at least for layers configuration. But there are 
     "thumbWidth": 60,
     "imageRatio": 1,
     "imageName": "preview.png"
-  }
+  },
+  "baseImgUri": ""
 }
 ```
 

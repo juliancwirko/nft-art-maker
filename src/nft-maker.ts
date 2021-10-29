@@ -49,6 +49,7 @@ const {
   outputJsonFileName,
   editionNameFormat,
   shuffleLayerConfigurations,
+  baseImgUri,
 } = config;
 
 const basePath = cwd();
@@ -131,7 +132,7 @@ const addMetadata = (_dna: string[], _edition: number) => {
 
   const image = svgBase64DataOnly
     ? imgToSvg(ctx.getImageData(0, 0, format.width, format.height))
-    : `${_edition}.png`;
+    : `${baseImgUri ? `${baseImgUri}/` : ''}${_edition}.png`;
 
   const dataToHash = svgBase64DataOnly
     ? optimize(image, { multipass: true }).data

@@ -50,6 +50,11 @@ const editionNameFormat = customConfig?.config?.editionNameFormat || '#';
 const shuffleLayerConfigurations =
   customConfig?.config?.shuffleLayerConfigurations || false;
 
+// it will be used for updateImgPaths command
+// It is useful when you want to update your image paths in metadata.json file after, for example, CAR IPFS deployment
+// You can also set it for initial generation
+const baseImgUri = customConfig?.config?.baseImgUri || '';
+
 // Parameters for the preview file
 const preview = customConfig?.config?.preview || {
   thumbPerRow: 20,
@@ -73,6 +78,7 @@ const config = {
   outputJsonFileName,
   editionNameFormat,
   shuffleLayerConfigurations,
+  baseImgUri,
 };
 
 export default config;

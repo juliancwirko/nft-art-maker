@@ -3,11 +3,13 @@
 import { exit, argv } from 'process';
 import { startCreating, buildSetup } from './nft-maker';
 import { executePreviewGeneration } from './create-preview';
+import { updateImgPaths } from './update-img-paths';
 import packageJson from '../package.json';
 
 const COMMANDS = {
   generate: 'generate',
   preview: 'preview',
+  updateImgPaths: 'updateImgPaths',
 };
 
 const args = argv;
@@ -20,8 +22,13 @@ if (command === '--version' || command === '-v') {
 }
 
 if (!command || !Object.keys(COMMANDS).includes(command)) {
+  const availableCommands = Object.keys(COMMANDS);
   console.log(
-    `Plaese provide a proper command. Available commands: ['${COMMANDS.generate}', '${COMMANDS.preview}', '--version', '-v']`
+    `Plaese provide a proper command. Available commands: ${[
+      ...availableCommands,
+      '--version',
+      '-v',
+    ].join(', ')}`
   );
   exit(9);
 }
@@ -33,4 +40,8 @@ if (command === COMMANDS.generate) {
 
 if (command === COMMANDS.preview) {
   executePreviewGeneration();
+}
+
+if (command === COMMANDS.updateImgPaths) {
+  updateImgPaths();
 }

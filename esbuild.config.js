@@ -3,7 +3,11 @@ const esbuild = require('esbuild');
 
 esbuild
   .build({
-    entryPoints: ['./src/index.ts', './src/create-preview.ts'],
+    entryPoints: [
+      './src/index.ts',
+      './src/create-preview.ts',
+      './src/update-img-paths.ts',
+    ],
     bundle: true,
     minify: true,
     outdir: 'build',
