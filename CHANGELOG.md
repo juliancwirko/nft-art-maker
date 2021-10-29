@@ -2,7 +2,7 @@
 - possibility to update the image path base in metadata.json - useful when you need to update your paths after uploading, for example, when uploading a CAR file using IPFS, but it can be anything.
 
 ### [2.1.0](https://github.com/juliancwirko/nft-art-maker/releases/tag/v2.1.0) (2021-10-28)
-- bring back `shuffleLayerConfigurations` it has a valid use case even if we wan't only basic fuctionality
+- bring back `shuffleLayerConfigurations` it has a valid use case even if we want only basic functionality
 - fix for preview generation
 
 ### [2.0.0](https://github.com/juliancwirko/nft-art-maker/releases/tag/v2.0.0) (2021-10-23)
