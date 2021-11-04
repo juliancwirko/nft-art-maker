@@ -63,6 +63,10 @@ const metadataList: TempMetadata[] = [];
 let attributesList: { trait_type: string; value: string }[] = [];
 const dnaList: string[][] = [];
 
+const getSortedMetadata = (metadataList: TempMetadata[]) => {
+  return metadataList.sort((a, b) => a.edition - b.edition);
+};
+
 export const buildSetup = () => {
   if (fs.existsSync(buildDir)) {
     fs.rmdirSync(buildDir, { recursive: true });
@@ -242,7 +246,9 @@ const writeMetaData = (_data: string) => {
 const getProvenanceHash = () => {
   const hash = createHash('sha256');
 
-  const hashes = metadataList.map((metadataObj) => metadataObj.dna).join('');
+  const hashes = getSortedMetadata(metadataList)
+    .map((metadataObj) => metadataObj.dna)
+    .join('');
   hash.update(hashes);
 
   return hash.digest('hex');
@@ -251,7 +257,7 @@ const getProvenanceHash = () => {
 const shuffle = (array: number[]) => {
   let currentIndex = array.length,
     randomIndex;
-  while (currentIndex != 0) {
+  while (currentIndex !== 0) {
     randomIndex = Math.floor(Math.random() * currentIndex);
     currentIndex--;
     [array[currentIndex], array[randomIndex]] = [
@@ -331,7 +337,6 @@ export const startCreating = async () => {
           });
           !svgBase64DataOnly && saveImage(abstractedIndexes[0]);
           addMetadata(newDna, abstractedIndexes[0]);
-          console.log(`Created edition: ${abstractedIndexes[0]}`);
         });
         dnaList.push(newDna);
         editionCount++;
@@ -349,8 +354,10 @@ export const startCreating = async () => {
     layerConfigIndex++;
   }
 
+  console.log('Finished! Check out the output directory.');
+
   const metadata = {
-    editions: metadataList,
+    editions: getSortedMetadata(metadataList),
     provenanceHash: getProvenanceHash(),
   };
 

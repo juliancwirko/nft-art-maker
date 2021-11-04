@@ -1,3 +1,6 @@
+### [2.2.1](https://github.com/juliancwirko/nft-art-maker/releases/tag/v2.2.1) (2021-11-04)
+- bugfix: there was a problem with `shuffleLayerConfigurations` which randomized the entries in the metadata.json file but not the actual order of images. From now the order in the metadata.json is by edition, but then the images are correctly randomly ordered
+
 ### [2.2.0](https://github.com/juliancwirko/nft-art-maker/releases/tag/v2.2.0) (2021-10-29)
 - possibility to update the image path base in metadata.json - useful when you need to update your paths after uploading, for example, when uploading a CAR file using IPFS, but it can be anything.
 
