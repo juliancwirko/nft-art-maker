@@ -1,5 +1,5 @@
 import { cosmiconfigSync } from 'cosmiconfig';
-import { cwd, exit } from 'process';
+import { cwd } from 'process';
 
 const explorerSync = cosmiconfigSync('nftartmaker');
 const customConfig = explorerSync.search(cwd());
@@ -12,13 +12,6 @@ const svgBase64DataOnly =
 // example of the file name face1#100.png (where 100 is the max rarity level)
 // For more info check: https://github.com/HashLips/hashlips_art_engine
 const layerConfigurations = customConfig?.config?.layerConfigurations;
-
-if (!layerConfigurations) {
-  console.log(
-    'You have to configure layers first. See the docs on how to do it. You can also provide other settings in the config file.'
-  );
-  exit(9);
-}
 
 // Width and height of the image
 const format = customConfig?.config?.format || {

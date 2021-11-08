@@ -68,6 +68,13 @@ const getSortedMetadata = (metadataList: TempMetadata[]) => {
 };
 
 export const buildSetup = () => {
+  if (!layerConfigurations) {
+    console.log(
+      'You have to configure layers first. See the docs on how to do it. You can also provide other settings in the config file.'
+    );
+    exit(9);
+  }
+
   if (fs.existsSync(buildDir)) {
     fs.rmdirSync(buildDir, { recursive: true });
   }

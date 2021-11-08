@@ -4,7 +4,7 @@
     "node": "^12.20.0 || ^14.13.1 || >=16.0.0"
   },
   "types": "build/types",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "description": "NFT Art Maker - generates a randomized set of images or encoded SVGs from provided PNG layers",
   "main": "build/index.js",
   "bin": {
@@ -48,6 +48,6 @@
   "dependencies": {
     "canvas": "^2.8.0",
     "cosmiconfig": "^7.0.1",
-    "svgo": "^2.7.0"
+    "svgo": "^2.8.0"
   }
 }
