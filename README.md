@@ -1,4 +1,4 @@
-### NFT art maker
+### NFT art maker (Work in progress)
 
 The tool generates a randomized set of images or encoded SVGs from provided PNG layers.
 
