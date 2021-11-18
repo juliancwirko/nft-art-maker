@@ -1,3 +1,9 @@
+### [3.0.0](https://github.com/juliancwirko/nft-art-maker/releases/tag/v3.0.0) (2021-11-16)
+- schema for metadata.json file changes - it is now more standardized
+- possibility to pack files using ipfs-car and generate metadata JSON file for each of them with updated CIDs to files. Metadata files will also be packed, and there will be output with the CIDs list. It could be useful when minting
+- removed the option to replace the base file URI. It was ok, but a different URI for each file with a different CID is a better solution, and this is now possible using the `nft-art-maker pack` command
+- these are breaking changes, so the major version is now 3. You can still use the older versions.
+
 ### [2.2.2](https://github.com/juliancwirko/nft-art-maker/releases/tag/v2.2.2) (2021-11-08)
 - bugfix: version command, now it is possible to check the version without configuration
 

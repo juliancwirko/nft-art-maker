@@ -1,19 +1,17 @@
 {
   "name": "nft-art-maker",
   "engines": {
-    "node": "^12.20.0 || ^14.13.1 || >=16.0.0"
+    "node": "^12.20.0 || ^14.13.1 || ^16.0.0"
   },
   "types": "build/types",
-  "version": "2.2.2",
+  "version": "3.0.0",
   "description": "NFT Art Maker - generates a randomized set of images or encoded SVGs from provided PNG layers",
   "main": "build/index.js",
   "bin": {
     "nft-art-maker": "./build/index.js"
   },
   "scripts": {
-    "generate": "npm run build && node build/index.js",
     "build": "rimraf build && node ./esbuild.config.js && tsc",
-    "preview": "node build/create-preview.js",
     "dev:lint": "eslint src/** --fix",
     "dev:prettier": "prettier --write 'src/**/*.{js,ts,json}'",
     "prepublishOnly": "npm run build"
@@ -48,6 +46,7 @@
   "dependencies": {
     "canvas": "^2.8.0",
     "cosmiconfig": "^7.0.1",
+    "ipfs-car": "^0.5.10",
     "svgo": "^2.8.0"
   }
 }

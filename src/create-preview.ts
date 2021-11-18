@@ -6,6 +6,23 @@ import config from './config';
 const basePath = cwd();
 const buildDir = `${basePath}/output`;
 
+interface Metadata {
+  name: string;
+  description: string;
+  properties: {
+    edition: number;
+    attributes: {
+      trait_type: string;
+      value: string;
+    }[];
+    base64SvgDataUri: string;
+  };
+  image: {
+    href: string;
+    hash: string;
+  };
+}
+
 export const executePreviewGeneration = () => {
   // read json data
   const rawdata = fs.readFileSync(
@@ -13,7 +30,7 @@ export const executePreviewGeneration = () => {
   );
   const metadataList = JSON.parse(rawdata.toString());
 
-  const saveProjectPreviewImage = async (_data: Record<string, unknown>[]) => {
+  const saveProjectPreviewImage = async (_data: Metadata[]) => {
     // Extract from preview config
     const { thumbWidth, thumbPerRow, imageRatio, imageName } = config.preview;
     // Calculate height on the fly
@@ -49,17 +66,20 @@ export const executePreviewGeneration = () => {
       for (let index = 0; index < _data.length; index++) {
         const nft = _data[index];
         const image = new Image();
-        image.src = nft.image as string;
+        image.src = nft.properties.base64SvgDataUri;
         drawImageFn(image, index);
       }
     } else {
       for (let index = 0; index < _data.length; index++) {
         const nft = _data[index];
-        await loadImage(
-          `${buildDir}/${config.outputImagesDirName}/${nft.edition}.png`
-        ).then((image) => {
+        try {
+          const image = await loadImage(
+            `${buildDir}/${config.outputImagesDirName}/${nft.properties.edition}.png`
+          );
           drawImageFn(image, index);
-        });
+        } catch (e) {
+          console.log((e as Error)?.message);
+        }
       }
     }
 
