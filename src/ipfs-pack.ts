@@ -4,6 +4,8 @@ import {
   mkdirSync,
   readFileSync,
   writeFileSync,
+  accessSync,
+  constants,
 } from 'fs';
 import { packToFs } from 'ipfs-car/pack/fs';
 import { FsBlockStore } from 'ipfs-car/blockstore/fs';
@@ -16,6 +18,7 @@ const buildDir = `${basePath}/${config.outputDirName}`;
 const imagesOutputDir = `${buildDir}/${config.outputImagesDirName}`;
 const jsonOutputDir = `${buildDir}/${config.outputJsonDirName}`;
 const packedOutputDir = `${buildDir}/${config.outputPackedDirName}`;
+const metadataFilePath = `${buildDir}/${config.outputJsonDirName}/${config.outputJsonFileName}`;
 
 const pack = async (type: 'images' | 'metadata') => {
   if (!existsSync(packedOutputDir)) {
@@ -30,6 +33,7 @@ const pack = async (type: 'images' | 'metadata') => {
     });
   } catch (e) {
     console.log(`Pack: ${(e as unknown as Error).message}`);
+    exit();
   }
 };
 
@@ -51,8 +55,48 @@ const getFileCIDsList = async (type: 'images' | 'metadata') => {
     }
   } catch (e) {
     console.log(`Get CIDs: ${(e as unknown as Error).message}`);
+    exit();
   }
   return list;
+};
+
+const getMetadataFile = () => {
+  try {
+    accessSync(metadataFilePath, constants.R_OK | constants.W_OK);
+  } catch (err) {
+    console.error('No access to the metadata JSON file!');
+    exit();
+  }
+
+  const rawFile = readFileSync(metadataFilePath);
+  return JSON.parse(rawFile.toString('utf8'));
+};
+
+const getMetadataItemCid = (imagesInfoList: FileInfo[], fileName: string) => {
+  return imagesInfoList.find((item) => item.name === fileName)?.cid;
+};
+
+const updateSummaryMetadataFile = (imagesInfoList: FileInfo[]) => {
+  const metadataFile = getMetadataFile();
+  const newMetadataFile = { ...metadataFile };
+  const newEditions = [...newMetadataFile.editions];
+  if (newEditions && newEditions.length) {
+    const modifiedEditions = newEditions.map(
+      (item: { image: { href: string }; fileName: string }) => {
+        item.image.href = `ipfs://${
+          getMetadataItemCid(imagesInfoList, item.image.href) || ''
+        }`;
+        return item;
+      }
+    );
+
+    newMetadataFile.editions = modifiedEditions;
+
+    writeFileSync(metadataFilePath, JSON.stringify(newMetadataFile, null, 2));
+  } else {
+    console.log("Couldn't find any items in metadata file");
+    exit();
+  }
 };
 
 const updateMetadataFiles = (imagesInfoList: FileInfo[]) => {
@@ -89,6 +133,7 @@ export const ipfsPack = async () => {
 
     // Update all metadata json files with the CIDs from images car file
     updateMetadataFiles(imagesList);
+    updateSummaryMetadataFile(imagesList);
 
     // Pack all metadata json files
     await pack('metadata');
