@@ -31,6 +31,7 @@ interface TempMetadata {
       trait_type: string;
       value: string;
     }[];
+    tags?: string;
     base64SvgDataUri?: string;
   };
   image: {
@@ -162,6 +163,7 @@ const addMetadata = (_dna: string[], _edition: number) => {
     properties: {
       edition: _edition,
       attributes: attributesList,
+      tags: config.tags,
       ...(svgBase64DataOnly
         ? {
             base64SvgDataUri: optimize(image, {

@@ -69,6 +69,7 @@ You should use the config file at least for layers configuration. But there are 
   "outputImagesDirName": "images",
   "outputJsonFileName": "metadata.json",
   "editionNameFormat": "#",
+  "tags": "tag1,tag2,tag3",
   "preview": {
     "thumbPerRow": 20,
     "thumbWidth": 60,

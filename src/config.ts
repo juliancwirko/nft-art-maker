@@ -53,6 +53,9 @@ const preview = customConfig?.config?.preview || {
   imageName: 'preview.png',
 };
 
+// Tags for your collection as string. Format: 'tag1,tag2,tag3'.
+const tags = customConfig?.config?.tags || '';
+
 const config = {
   format,
   description,
@@ -69,6 +72,7 @@ const config = {
   outputPackedDirName,
   editionNameFormat,
   shuffleLayerConfigurations,
+  tags,
 };
 
 export default config;
