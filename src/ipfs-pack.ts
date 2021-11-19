@@ -82,10 +82,15 @@ const updateSummaryMetadataFile = (imagesInfoList: FileInfo[]) => {
   const newEditions = [...newMetadataFile.editions];
   if (newEditions && newEditions.length) {
     const modifiedEditions = newEditions.map(
-      (item: { image: { href: string }; fileName: string }) => {
-        item.image.href = `ipfs://${
-          getMetadataItemCid(imagesInfoList, item.image.href) || ''
-        }`;
+      (item: {
+        image: { href: string };
+        fileName: string;
+        fileUri: string;
+      }) => {
+        const prevImgHref = item.image.href;
+        const cid = getMetadataItemCid(imagesInfoList, prevImgHref) || '';
+        item.image.href = `https://ipfs.io/ipfs/${cid}`;
+        item.fileUri = `ipfs://${cid}`;
         return item;
       }
     );
@@ -106,7 +111,8 @@ const updateMetadataFiles = (imagesInfoList: FileInfo[]) => {
     }.json`;
     const rawdata = readFileSync(metadataFile);
     const fileJSON = JSON.parse(rawdata.toString());
-    fileJSON.image.href = `ipfs://${imageInfo.cid}`;
+    fileJSON.image.href = `https://ipfs.io/ipfs/${imageInfo.cid}`;
+    fileJSON.fileUri = `ipfs://${imageInfo.cid}`;
     writeFileSync(metadataFile, JSON.stringify(fileJSON, null, 2));
   }
 };
