@@ -35,6 +35,8 @@ const outputDirName = customConfig?.config?.outputDirName || 'output';
 const outputJsonDirName = customConfig?.config?.outputJsonDirName || 'json';
 const outputImagesDirName =
   customConfig?.config?.outputImagesDirName || 'images';
+const outputPackedDirName =
+  customConfig?.config?.outputPackedDirName || 'packed';
 const outputJsonFileName =
   customConfig?.config?.outputJsonFileName || 'metadata.json';
 
@@ -43,11 +45,6 @@ const editionNameFormat = customConfig?.config?.editionNameFormat || '#';
 const shuffleLayerConfigurations =
   customConfig?.config?.shuffleLayerConfigurations || false;
 
-// it will be used for updateImgPaths command
-// It is useful when you want to update your image paths in metadata.json file after, for example, CAR IPFS deployment
-// You can also set it for initial generation
-const baseImgUri = customConfig?.config?.baseImgUri || '';
-
 // Parameters for the preview file
 const preview = customConfig?.config?.preview || {
   thumbPerRow: 20,
@@ -55,6 +52,9 @@ const preview = customConfig?.config?.preview || {
   imageRatio: format.width / format.height,
   imageName: 'preview.png',
 };
+
+// Tags for your collection as string. Format: 'tag1,tag2,tag3'.
+const tags = customConfig?.config?.tags || '';
 
 const config = {
   format,
@@ -69,9 +69,10 @@ const config = {
   outputJsonDirName,
   outputImagesDirName,
   outputJsonFileName,
+  outputPackedDirName,
   editionNameFormat,
   shuffleLayerConfigurations,
-  baseImgUri,
+  tags,
 };
 
 export default config;

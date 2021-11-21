@@ -1,3 +1,5 @@
+// Pixels to SVG: https://codepen.io/shshaw/pen/XbxvNj
+
 interface Img {
   data: Uint8ClampedArray;
   width: number;

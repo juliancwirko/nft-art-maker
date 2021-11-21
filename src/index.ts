@@ -3,13 +3,13 @@
 import { exit, argv } from 'process';
 import { startCreating, buildSetup } from './nft-maker';
 import { executePreviewGeneration } from './create-preview';
-import { updateImgPaths } from './update-img-paths';
+import { ipfsPack } from './ipfs-pack';
 import packageJson from '../package.json';
 
 const COMMANDS = {
   generate: 'generate',
   preview: 'preview',
-  updateImgPaths: 'updateImgPaths',
+  pack: 'pack',
 };
 
 const args = argv;
@@ -42,6 +42,6 @@ if (command === COMMANDS.preview) {
   executePreviewGeneration();
 }
 
-if (command === COMMANDS.updateImgPaths) {
-  updateImgPaths();
+if (command === COMMANDS.pack) {
+  ipfsPack();
 }

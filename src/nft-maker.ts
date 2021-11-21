@@ -23,16 +23,21 @@ interface Layer {
 }
 
 interface TempMetadata {
-  dna: string;
   name: string;
   description: string;
-  image: string;
-  edition: number;
-  date: number;
-  attributes: {
-    trait_type: string;
-    value: string;
-  }[];
+  properties: {
+    edition: number;
+    attributes: {
+      trait_type: string;
+      value: string;
+    }[];
+    tags?: string;
+    base64SvgDataUri?: string;
+  };
+  image: {
+    href: string;
+    hash: string;
+  };
 }
 
 const {
@@ -49,7 +54,6 @@ const {
   outputJsonFileName,
   editionNameFormat,
   shuffleLayerConfigurations,
-  baseImgUri,
 } = config;
 
 const basePath = cwd();
@@ -64,7 +68,9 @@ let attributesList: { trait_type: string; value: string }[] = [];
 const dnaList: string[][] = [];
 
 const getSortedMetadata = (metadataList: TempMetadata[]) => {
-  return metadataList.sort((a, b) => a.edition - b.edition);
+  return metadataList.sort(
+    (a, b) => a.properties.edition - b.properties.edition
+  );
 };
 
 export const buildSetup = () => {
@@ -76,7 +82,7 @@ export const buildSetup = () => {
   }
 
   if (fs.existsSync(buildDir)) {
-    fs.rmdirSync(buildDir, { recursive: true });
+    fs.rmSync(buildDir, { recursive: true, force: true });
   }
   fs.mkdirSync(buildDir);
   fs.mkdirSync(path.join(buildDir, `/${outputJsonDirName}`));
@@ -143,7 +149,7 @@ const addMetadata = (_dna: string[], _edition: number) => {
 
   const image = svgBase64DataOnly
     ? imgToSvg(ctx.getImageData(0, 0, format.width, format.height))
-    : `${baseImgUri ? `${baseImgUri}/` : ''}${_edition}.png`;
+    : `${_edition}.png`;
 
   const dataToHash = svgBase64DataOnly
     ? optimize(image, { multipass: true }).data
@@ -151,23 +157,41 @@ const addMetadata = (_dna: string[], _edition: number) => {
 
   hash.update(dataToHash);
 
-  const dateTime = Date.now();
-
   const tempMetadata = {
-    dna: hash.digest('hex'),
     name: `${editionNameFormat}${_edition}`,
     description: description,
-    image: svgBase64DataOnly
-      ? optimize(image, { multipass: true, datauri: 'base64' }).data
-      : image,
-    edition: _edition,
-    date: dateTime,
-    attributes: attributesList,
+    properties: {
+      edition: _edition,
+      attributes: attributesList,
+      tags: config.tags,
+      ...(svgBase64DataOnly
+        ? {
+            base64SvgDataUri: optimize(image, {
+              multipass: true,
+              datauri: 'base64',
+            }).data,
+          }
+        : {}),
+    },
+    image: {
+      href: !svgBase64DataOnly ? image : '',
+      hash: hash.digest('hex'),
+    },
   };
 
   metadataList.push(tempMetadata);
 
   attributesList = [];
+};
+
+const saveMetaDataSingleFile = (editionCount: number) => {
+  const metadata = metadataList.find(
+    (meta) => meta.properties.edition === editionCount
+  );
+  fs.writeFileSync(
+    `${buildDir}/${outputJsonDirName}/${editionCount}.json`,
+    JSON.stringify(metadata, null, 2)
+  );
 };
 
 const addAttributes = (_element: {
@@ -254,7 +278,7 @@ const getProvenanceHash = () => {
   const hash = createHash('sha256');
 
   const hashes = getSortedMetadata(metadataList)
-    .map((metadataObj) => metadataObj.dna)
+    .map((metadataObj) => metadataObj.image.hash)
     .join('');
   hash.update(hashes);
 
@@ -344,6 +368,7 @@ export const startCreating = async () => {
           });
           !svgBase64DataOnly && saveImage(abstractedIndexes[0]);
           addMetadata(newDna, abstractedIndexes[0]);
+          !svgBase64DataOnly && saveMetaDataSingleFile(abstractedIndexes[0]);
         });
         dnaList.push(newDna);
         editionCount++;
