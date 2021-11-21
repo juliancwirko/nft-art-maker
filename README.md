@@ -17,6 +17,7 @@ The tool generates a randomized set of images or encoded SVGs from provided PNG 
 This lib is a customized and simplified version of the [HashLips art engine](https://github.com/HashLips/hashlips_art_engine). If you need more options and functionality, please use HashLips.
 
 #### How to use it:
+- minimum version of Node is **14.14.0**, doesn't work on v17 yet
 - create a project directory -> `mkdir my-nft-collection ; cd my-nft-collection`
 - in that directory, create the `layers` directory with all of your layers split into proper directories
 - create a configuration file `.nftartmakerrc` (other file names also allowed, check out [cosmiconfig](https://github.com/davidtheclark/cosmiconfig) for more info). This file should be a JSON formatted config file. You'll find all configuration options below.
