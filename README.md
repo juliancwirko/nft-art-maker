@@ -4,9 +4,11 @@ The tool generates a randomized set of images or encoded SVGs from provided PNG 
 
 **Please test it before using it for the real stuff. It can always be buggy, and blockchain doesn't forget anything.**
 
+- [v3 walkthrough video](https://youtu.be/MnRjOlT60nc)
+
 #### Older versions:
-- [v2](https://github.com/juliancwirko/nft-art-maker/tree/v2.2.2) [Video for v2.0](https://youtu.be/A_Qw9SLVT6M)
-- [v1](https://github.com/juliancwirko/nft-art-maker/tree/v1.0.1) [Video for v1.0](https://youtu.be/uU10k6q79P8)
+- [v2](https://github.com/juliancwirko/nft-art-maker/tree/v2.2.2) | [Video for v2.0](https://youtu.be/A_Qw9SLVT6M)
+- [v1](https://github.com/juliancwirko/nft-art-maker/tree/v1.0.1) | [Video for v1.0](https://youtu.be/uU10k6q79P8)
 
 #### Based on:
 - [HashLips art engine](https://github.com/HashLips/hashlips_art_engine) - only main functionality (output metadata.json is not standarized in any way)
