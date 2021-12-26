@@ -26,7 +26,7 @@ interface Metadata {
 export const executePreviewGeneration = () => {
   // read json data
   const rawdata = fs.readFileSync(
-    `${basePath}/${config.outputDirName}/${config.outputJsonDirName}/${config.outputJsonFileName}`
+    `${basePath}/${config.outputDirName}/${config.outputJsonFileName}`
   );
   const metadataList = JSON.parse(rawdata.toString());
 

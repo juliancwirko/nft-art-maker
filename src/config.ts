@@ -39,6 +39,10 @@ const outputPackedDirName =
   customConfig?.config?.outputPackedDirName || 'packed';
 const outputJsonFileName =
   customConfig?.config?.outputJsonFileName || 'metadata.json';
+const outputImagesCarFileName =
+  customConfig?.config?.outputCarFileName || 'images.car';
+const outputMetadataCarFileName =
+  customConfig?.config?.outputCarFileName || 'metadata.car';
 
 const editionNameFormat = customConfig?.config?.editionNameFormat || '#';
 
@@ -70,6 +74,8 @@ const config = {
   outputImagesDirName,
   outputJsonFileName,
   outputPackedDirName,
+  outputImagesCarFileName,
+  outputMetadataCarFileName,
   editionNameFormat,
   shuffleLayerConfigurations,
   tags,

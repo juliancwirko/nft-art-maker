@@ -1,7 +1,11 @@
+### [4.0.0](https://github.com/juliancwirko/nft-art-maker/releases/tag/v4.0.0) (2021-12-26)
+- The previous assumption about unique CIDs for every file is not well suited for a proper smart contract with a randomized minting process. It would be hard to keep tracking all the CIDs there. It is much simpler and cheaper to have file numbers for all of them and base CID for the directory. `nft-art-maker pack` will now create two .car files with images and metadata json files. The base CID for images will be replaced in all metadata files after packing them into .car. Then the metadata json files CID will be saved into the main big metadata.json file. You can then use both when minting. (Unique CIDs will still work with version 3.0.0, so feel free to use it if needed.)
+- added new fields for the image in the metadata output
+
 ### [3.0.0](https://github.com/juliancwirko/nft-art-maker/releases/tag/v3.0.0) (2021-11-16)
 - schema for metadata.json file changes - it is now more standardized
 - possibility to pack files using ipfs-car and generate metadata JSON file for each of them with updated CIDs to files. Metadata files will also be packed, and there will be output with the CIDs list. It could be useful when minting
-- removed the option to replace the base file URI. It was ok, but a different URI for each file with a different CID is a better solution, and this is now possible using the `nft-art-maker pack` command
+- ~~removed the option to replace the base file URI. It was ok, but a different URI for each file with a different CID is a better solution, and this is now possible using the `nft-art-maker pack` command~~ --> Invalidated in v4.0.0 (for more details see description for v4)
 - these are breaking changes, so the major version is now 3. You can still use the older versions.
 - minimum version of Node is now **14.14.0**
 

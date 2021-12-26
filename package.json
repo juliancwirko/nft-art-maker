@@ -4,7 +4,7 @@
     "node": "^14.14.0 || ^16.0.0"
   },
   "types": "build/types",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "description": "NFT Art Maker - generates a randomized set of images or encoded SVGs from provided PNG layers",
   "main": "build/index.js",
   "bin": {

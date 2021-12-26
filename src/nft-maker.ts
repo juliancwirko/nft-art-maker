@@ -49,9 +49,9 @@ const {
   svgBase64DataOnly,
   layersDirName,
   outputDirName,
+  outputJsonFileName,
   outputJsonDirName,
   outputImagesDirName,
-  outputJsonFileName,
   editionNameFormat,
   shuffleLayerConfigurations,
 } = config;
@@ -85,7 +85,8 @@ export const buildSetup = () => {
     fs.rmSync(buildDir, { recursive: true, force: true });
   }
   fs.mkdirSync(buildDir);
-  fs.mkdirSync(path.join(buildDir, `/${outputJsonDirName}`));
+  !svgBase64DataOnly &&
+    fs.mkdirSync(path.join(buildDir, `/${outputJsonDirName}`));
   !svgBase64DataOnly &&
     fs.mkdirSync(path.join(buildDir, `/${outputImagesDirName}`));
 };
@@ -268,10 +269,7 @@ const createDna = (_layers: Layer[]) => {
 };
 
 const writeMetaData = (_data: string) => {
-  fs.writeFileSync(
-    `${buildDir}/${outputJsonDirName}/${outputJsonFileName}`,
-    _data
-  );
+  fs.writeFileSync(`${buildDir}/${outputJsonFileName}`, _data);
 };
 
 const getProvenanceHash = () => {

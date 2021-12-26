@@ -6,6 +6,7 @@ import {
   writeFileSync,
   accessSync,
   constants,
+  readdirSync,
 } from 'fs';
 import { packToFs } from 'ipfs-car/pack/fs';
 import { FsBlockStore } from 'ipfs-car/blockstore/fs';
@@ -18,16 +19,20 @@ const buildDir = `${basePath}/${config.outputDirName}`;
 const imagesOutputDir = `${buildDir}/${config.outputImagesDirName}`;
 const jsonOutputDir = `${buildDir}/${config.outputJsonDirName}`;
 const packedOutputDir = `${buildDir}/${config.outputPackedDirName}`;
-const metadataFilePath = `${buildDir}/${config.outputJsonDirName}/${config.outputJsonFileName}`;
+const metadataFilePath = `${buildDir}/${config.outputJsonFileName}`;
 
-const pack = async (type: 'images' | 'metadata') => {
+const pack = async (type: string) => {
   if (!existsSync(packedOutputDir)) {
     mkdirSync(packedOutputDir);
   }
   try {
     return await packToFs({
-      input: type === 'metadata' ? jsonOutputDir : imagesOutputDir,
-      output: `${packedOutputDir}/${type}.car`,
+      input: type === 'images' ? imagesOutputDir : jsonOutputDir,
+      output: `${packedOutputDir}/${
+        type === 'images'
+          ? config.outputImagesCarFileName
+          : config.outputMetadataCarFileName
+      }`,
       blockstore: new FsBlockStore(),
       wrapWithDirectory: false,
     });
@@ -37,27 +42,28 @@ const pack = async (type: 'images' | 'metadata') => {
   }
 };
 
-interface FileInfo {
-  name: string;
-  cid: string;
-}
+const getBaseCID = async (type: string) => {
+  const inStream = createReadStream(
+    `${packedOutputDir}/${
+      type === 'images'
+        ? config.outputImagesCarFileName
+        : config.outputMetadataCarFileName
+    }`
+  );
 
-const getFileCIDsList = async (type: 'images' | 'metadata') => {
-  const inStream = createReadStream(`${packedOutputDir}/${type}.car`);
-
-  const list: FileInfo[] = [];
+  let baseCid;
   try {
     for await (const file of unpackStream(inStream)) {
-      const { name, cid } = file;
-      if (file.type === 'raw') {
-        list.push({ name, cid: cid.toString() });
+      if (file.type === 'directory') {
+        baseCid = file.cid.toString();
       }
     }
   } catch (e) {
     console.log(`Get CIDs: ${(e as unknown as Error).message}`);
     exit();
   }
-  return list;
+
+  return baseCid;
 };
 
 const getMetadataFile = () => {
@@ -72,25 +78,35 @@ const getMetadataFile = () => {
   return JSON.parse(rawFile.toString('utf8'));
 };
 
-const getMetadataItemCid = (imagesInfoList: FileInfo[], fileName: string) => {
-  return imagesInfoList.find((item) => item.name === fileName)?.cid;
+const getMetadataAssetsFiles = () => {
+  try {
+    accessSync(jsonOutputDir, constants.R_OK | constants.W_OK);
+  } catch (err) {
+    console.error('No access to the metadata JSON files!');
+    exit();
+  }
+  return readdirSync(jsonOutputDir);
 };
 
-const updateSummaryMetadataFile = (imagesInfoList: FileInfo[]) => {
+const updateSummaryMetadataFile = (imagesBaseCid: string | undefined) => {
   const metadataFile = getMetadataFile();
   const newMetadataFile = { ...metadataFile };
   const newEditions = [...newMetadataFile.editions];
-  if (newEditions && newEditions.length) {
+  if (newEditions && newEditions.length && imagesBaseCid) {
     const modifiedEditions = newEditions.map(
       (item: {
-        image: { href: string };
-        fileName: string;
-        fileUri: string;
+        image: {
+          href: string;
+          ipfsUri: string;
+          ipfsCid: string;
+          fileName: string;
+        };
+        properties: { edition: number };
       }) => {
-        const prevImgHref = item.image.href;
-        const cid = getMetadataItemCid(imagesInfoList, prevImgHref) || '';
-        item.image.href = `https://ipfs.io/ipfs/${cid}`;
-        item.fileUri = `ipfs://${cid}`;
+        item.image.href = `https://ipfs.io/ipfs/${imagesBaseCid}/${item.properties.edition}.png`;
+        item.image.ipfsUri = `ipfs://${imagesBaseCid}/${item.properties.edition}.png`;
+        item.image.ipfsCid = imagesBaseCid;
+        item.image.fileName = `${item.properties.edition}.png`;
         return item;
       }
     );
@@ -104,24 +120,33 @@ const updateSummaryMetadataFile = (imagesInfoList: FileInfo[]) => {
   }
 };
 
-const updateMetadataFiles = (imagesInfoList: FileInfo[]) => {
-  for (const imageInfo of imagesInfoList) {
-    const metadataFile = `${jsonOutputDir}/${
-      imageInfo.name.split('.')[0]
-    }.json`;
-    const rawdata = readFileSync(metadataFile);
+const updateMetadataFiles = (imagesBaseCid: string | undefined) => {
+  const metadataAssetsList = getMetadataAssetsFiles();
+
+  for (const metadataFile of metadataAssetsList) {
+    const rawdata = readFileSync(`${jsonOutputDir}/${metadataFile}`);
     const fileJSON = JSON.parse(rawdata.toString());
-    fileJSON.image.href = `https://ipfs.io/ipfs/${imageInfo.cid}`;
-    fileJSON.fileUri = `ipfs://${imageInfo.cid}`;
-    writeFileSync(metadataFile, JSON.stringify(fileJSON, null, 2));
+    fileJSON.image.href = `https://ipfs.io/ipfs/${imagesBaseCid}/${fileJSON.properties.edition}.png`;
+    fileJSON.image.ipfsUri = `ipfs://${imagesBaseCid}/${fileJSON.properties.edition}.png`;
+    fileJSON.image.ipfsCid = imagesBaseCid;
+    fileJSON.image.fileName = `${fileJSON.properties.edition}.png`;
+
+    writeFileSync(
+      `${jsonOutputDir}/${metadataFile}`,
+      JSON.stringify(fileJSON, null, 2)
+    );
   }
 };
 
-const saveMetadataCIDsList = (metadataList: FileInfo[]) => {
-  writeFileSync(
-    `${packedOutputDir}/metadataList.json`,
-    JSON.stringify(metadataList, null, 2)
-  );
+export const updateMetadadaWithBaseCID = (
+  baseMetadataCID: string | undefined
+) => {
+  if (baseMetadataCID) {
+    const metadataFile = getMetadataFile();
+    const newMetadataFile = { ...metadataFile };
+    newMetadataFile.metadataFilesIpfsBaseCid = baseMetadataCID;
+    writeFileSync(metadataFilePath, JSON.stringify(newMetadataFile, null, 2));
+  }
 };
 
 export const ipfsPack = async () => {
@@ -135,18 +160,20 @@ export const ipfsPack = async () => {
   try {
     // Pack all images into ipfs car file
     await pack('images');
-    const imagesList = await getFileCIDsList('images');
+
+    const baseImagesCID = await getBaseCID('images');
 
     // Update all metadata json files with the CIDs from images car file
-    updateMetadataFiles(imagesList);
-    updateSummaryMetadataFile(imagesList);
+    updateMetadataFiles(baseImagesCID);
+    updateSummaryMetadataFile(baseImagesCID);
 
-    // Pack all metadata json files
+    // Pack all updated metadata json files
     await pack('metadata');
-    const metadataList = await getFileCIDsList('metadata');
 
-    // Sace the list of metadata json files CIDs from metadataa car file
-    saveMetadataCIDsList(metadataList);
+    const baseMetadataCID = await getBaseCID('metadata');
+
+    // Add base metadata files CID into the main metadata.json file to be used later
+    updateMetadadaWithBaseCID(baseMetadataCID);
 
     console.log('Done! Check the output directory.');
   } catch (e) {
