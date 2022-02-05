@@ -101,12 +101,12 @@ const updateSummaryMetadataFile = (imagesBaseCid: string | undefined) => {
           ipfsCid: string;
           fileName: string;
         };
-        properties: { edition: number };
+        edition: number;
       }) => {
-        item.image.href = `https://ipfs.io/ipfs/${imagesBaseCid}/${item.properties.edition}.png`;
-        item.image.ipfsUri = `ipfs://${imagesBaseCid}/${item.properties.edition}.png`;
+        item.image.href = `https://ipfs.io/ipfs/${imagesBaseCid}/${item.edition}.png`;
+        item.image.ipfsUri = `ipfs://${imagesBaseCid}/${item.edition}.png`;
         item.image.ipfsCid = imagesBaseCid;
-        item.image.fileName = `${item.properties.edition}.png`;
+        item.image.fileName = `${item.edition}.png`;
         return item;
       }
     );
@@ -126,10 +126,10 @@ const updateMetadataFiles = (imagesBaseCid: string | undefined) => {
   for (const metadataFile of metadataAssetsList) {
     const rawdata = readFileSync(`${jsonOutputDir}/${metadataFile}`);
     const fileJSON = JSON.parse(rawdata.toString());
-    fileJSON.image.href = `https://ipfs.io/ipfs/${imagesBaseCid}/${fileJSON.properties.edition}.png`;
-    fileJSON.image.ipfsUri = `ipfs://${imagesBaseCid}/${fileJSON.properties.edition}.png`;
+    fileJSON.image.href = `https://ipfs.io/ipfs/${imagesBaseCid}/${fileJSON.edition}.png`;
+    fileJSON.image.ipfsUri = `ipfs://${imagesBaseCid}/${fileJSON.edition}.png`;
     fileJSON.image.ipfsCid = imagesBaseCid;
-    fileJSON.image.fileName = `${fileJSON.properties.edition}.png`;
+    fileJSON.image.fileName = `${fileJSON.edition}.png`;
 
     writeFileSync(
       `${jsonOutputDir}/${metadataFile}`,

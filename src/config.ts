@@ -47,7 +47,7 @@ const outputMetadataCarFileName =
 const editionNameFormat = customConfig?.config?.editionNameFormat || '#';
 
 const shuffleLayerConfigurations =
-  customConfig?.config?.shuffleLayerConfigurations || false;
+  customConfig?.config?.shuffleLayerConfigurations || true;
 
 // Parameters for the preview file
 const preview = customConfig?.config?.preview || {

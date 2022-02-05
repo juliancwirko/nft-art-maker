@@ -4,7 +4,7 @@ import fs from 'fs';
 import { createHash } from 'crypto';
 import { createCanvas, loadImage, Image } from 'canvas';
 import { imgToSvg } from './img-to-svg';
-import { optimize } from 'svgo';
+import { optimize, OptimizedSvg } from 'svgo';
 import config from './config';
 
 interface LayerElement {
@@ -25,15 +25,13 @@ interface Layer {
 interface TempMetadata {
   name: string;
   description: string;
-  properties: {
-    edition: number;
-    attributes: {
-      trait_type: string;
-      value: string;
-    }[];
-    tags?: string;
-    base64SvgDataUri?: string;
-  };
+  edition: number;
+  attributes: {
+    trait_type: string;
+    value: string;
+  }[];
+  tags?: string;
+  base64SvgDataUri?: string;
   image: {
     href: string;
     hash: string;
@@ -68,9 +66,7 @@ let attributesList: { trait_type: string; value: string }[] = [];
 const dnaList: string[][] = [];
 
 const getSortedMetadata = (metadataList: TempMetadata[]) => {
-  return metadataList.sort(
-    (a, b) => a.properties.edition - b.properties.edition
-  );
+  return metadataList.sort((a, b) => a.edition - b.edition);
 };
 
 export const buildSetup = () => {
@@ -153,7 +149,7 @@ const addMetadata = (_dna: string[], _edition: number) => {
     : `${_edition}.png`;
 
   const dataToHash = svgBase64DataOnly
-    ? optimize(image, { multipass: true }).data
+    ? (optimize(image, { multipass: true }) as OptimizedSvg).data
     : canvas.toBuffer('image/png');
 
   hash.update(dataToHash);
@@ -161,19 +157,19 @@ const addMetadata = (_dna: string[], _edition: number) => {
   const tempMetadata = {
     name: `${editionNameFormat}${_edition}`,
     description: description,
-    properties: {
-      edition: _edition,
-      attributes: attributesList,
-      tags: config.tags,
-      ...(svgBase64DataOnly
-        ? {
-            base64SvgDataUri: optimize(image, {
+    edition: _edition,
+    attributes: attributesList,
+    tags: config.tags,
+    ...(svgBase64DataOnly
+      ? {
+          base64SvgDataUri: (
+            optimize(image, {
               multipass: true,
               datauri: 'base64',
-            }).data,
-          }
-        : {}),
-    },
+            }) as OptimizedSvg
+          ).data,
+        }
+      : {}),
     image: {
       href: !svgBase64DataOnly ? image : '',
       hash: hash.digest('hex'),
@@ -186,9 +182,7 @@ const addMetadata = (_dna: string[], _edition: number) => {
 };
 
 const saveMetaDataSingleFile = (editionCount: number) => {
-  const metadata = metadataList.find(
-    (meta) => meta.properties.edition === editionCount
-  );
+  const metadata = metadataList.find((meta) => meta.edition === editionCount);
   fs.writeFileSync(
     `${buildDir}/${outputJsonDirName}/${editionCount}.json`,
     JSON.stringify(metadata, null, 2)
@@ -327,6 +321,9 @@ export const startCreating = async () => {
   if (shuffleLayerConfigurations) {
     abstractedIndexes = shuffle(abstractedIndexes);
   }
+
+  console.log('Processing, please wait!');
+
   while (layerConfigIndex < layerConfigurations.length) {
     const layers = layersSetup(
       layerConfigurations[layerConfigIndex].layersOrder
