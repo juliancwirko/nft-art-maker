@@ -1,3 +1,8 @@
+### [5.0.0](https://github.com/juliancwirko/nft-art-maker/releases/tag/v5.0.0) (2021-01-05)
+- Changes in the metadata file structure, the attributes field is now in the root level
+- `shuffleLayerConfigurations` is now enabled by default - in most cases, it is desirable, but you can still disable it in the config file
+- it should also now work with Node 17 too
+
 ### [4.0.0](https://github.com/juliancwirko/nft-art-maker/releases/tag/v4.0.0) (2021-12-26)
 - The previous assumption about unique CIDs for every file is not well suited for a proper smart contract with a randomized minting process. It would be hard to keep tracking all the CIDs there. It is much simpler and cheaper to have file numbers for all of them and base CID for the directory. `nft-art-maker pack` will now create two .car files with images and metadata json files. The base CID for images will be replaced in all metadata files after packing them into .car. Then the metadata json files CID will be saved into the main big metadata.json file. You can then use both when minting. (Unique CIDs will still work with version 3.0.0, so feel free to use it if needed.)
 - added new fields for the image in the metadata output

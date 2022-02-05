@@ -9,14 +9,12 @@ const buildDir = `${basePath}/output`;
 interface Metadata {
   name: string;
   description: string;
-  properties: {
-    edition: number;
-    attributes: {
-      trait_type: string;
-      value: string;
-    }[];
-    base64SvgDataUri: string;
-  };
+  edition: number;
+  attributes: {
+    trait_type: string;
+    value: string;
+  }[];
+  base64SvgDataUri: string;
   image: {
     href: string;
     hash: string;
@@ -66,7 +64,7 @@ export const executePreviewGeneration = () => {
       for (let index = 0; index < _data.length; index++) {
         const nft = _data[index];
         const image = new Image();
-        image.src = nft.properties.base64SvgDataUri;
+        image.src = nft.base64SvgDataUri;
         drawImageFn(image, index);
       }
     } else {
@@ -74,7 +72,7 @@ export const executePreviewGeneration = () => {
         const nft = _data[index];
         try {
           const image = await loadImage(
-            `${buildDir}/${config.outputImagesDirName}/${nft.properties.edition}.png`
+            `${buildDir}/${config.outputImagesDirName}/${nft.edition}.png`
           );
           drawImageFn(image, index);
         } catch (e) {
