@@ -154,6 +154,8 @@ The example of a single output metadata file (for example 1.json):
 **Important!**
 Some of the `image` fields will be populated appropriately after running the `pack` command. All JSON files will get an update. They will be also updated in the final `metadata.car` file. This is why it is always recommended to use the `pack` command. But you can also update all paths with your own scripts.
 
+**The example of an actual single metadata file**: https://ipfs.io/ipfs/bafybeied5z3gndksdmbeaqxgbxryax6xp27nqfj3wy7c5x3usrol4sngam/149.json (the image is just for tests, poor quality, but also generated using the tool, there is a whole collection of 200 pieces so that you can change numbers to preview them).
+
 ##### Layers directory structure (example)
 
 Here is an example of the `layers` directory structure with the configuration from the example above.
