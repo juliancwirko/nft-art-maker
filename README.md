@@ -90,7 +90,7 @@ Every subdirectory in your `layers` directory should be named after the type of 
 
 ##### shuffleLayerConfigurations
 
-Disabled by default, but you can always enable it to shuffle items from different `layerConfigurations`.
+Enabled by default, but you can always enable it to shuffle items from different `layerConfigurations`.
 
 ##### Output type configuration
 
