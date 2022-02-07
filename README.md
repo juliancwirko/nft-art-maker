@@ -11,7 +11,7 @@ The primary task of this tool is to generate a randomized set of images from pro
 - [v1](https://github.com/juliancwirko/nft-art-maker/tree/v1.0.1) | [Video for v1.0](https://youtu.be/uU10k6q79P8)
 
 #### Based on:
-- [HashLips art engine](https://github.com/HashLips/hashlips_art_engine) - only main functionality (output metadata.json is not standarized in any way)
+- [HashLips art engine](https://github.com/HashLips/hashlips_art_engine) - only main functionality (output metadata schema should be suitable for most of the marketplaces)
 - [Pixels to SVG](https://codepen.io/shshaw/pen/XbxvNj) - SVG code from images
 - [SVGO](https://github.com/svg/svgo) - SVG optimization and base64 data uri generation
 - [ipfs-car](https://github.com/web3-storage/ipfs-car) - optionally for handling ipfs .car archives
