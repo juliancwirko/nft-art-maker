@@ -86,7 +86,7 @@ You should use the config file at least for layers configuration. But there are 
 
 ##### layers configuration
 
-Every subdirectory in your `layers` directory should be named after the type of the layer, and inside, you should put your png files. The name structure should be as follows: `filename1#100.png`, where the `#100` is a rarity level from 0 to 100.
+Every subdirectory in your `layers` directory should be named after the type of the layer, and inside, you should put your png files. The name structure should be as follows: `filename1#100.png`, where the `#100` is a rarity weight. Good explainer in Hashlips repo: [here](https://github.com/HashLips/hashlips_art_engine/issues/251#issuecomment-969911889).
 
 ##### shuffleLayerConfigurations
 
