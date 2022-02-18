@@ -4,6 +4,9 @@ The primary task of this tool is to generate a randomized set of images from pro
 
 **Please test it before using it for the real stuff. It can always be buggy.**
 
+- PNG layers for testing: https://ipfs.io/ipfs/bafkreicwfzj7f3xc6mjkyaqknd4gsosscznelpiwdtwmdp773irwuv2lqu
+- Latest walkthrough video: https://youtu.be/resGP6a7_34
+
 #### Older versions (check changelog):
 - [v4](https://github.com/juliancwirko/nft-art-maker/tree/v4.0.0)
 - [v3](https://github.com/juliancwirko/nft-art-maker/tree/v3.0.0) | [Video for v3.0](https://youtu.be/MnRjOlT60nc)
