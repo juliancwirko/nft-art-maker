@@ -44,19 +44,17 @@ nft-art-maker tool doesn't assume any way of uploading to ipfs, but I would reco
 
 #### Configuration options
 
-You should use the config file at least for layers configuration. But there are also other configuration options. Whole config example (of course remove comments when copying): 
+You should use the config file at least for layers configuration. But there are also other configuration options. Whole config example: 
 
-```javascript
+```json
 {
   "description": "Your collection name",
   "svgBase64DataOnly": true,
   "layerConfigurations": [
-    // 100 artworks (remove comments in real file)
     {
       "growEditionSizeTo": 100,
       "layersOrder": [{ "name": "face" }, { "name": "head" }, { "name": "eyes" }]
     },
-    // additional 10 artworks with pinky face (remove comments in real file)
     {
       "growEditionSizeTo": 110,
       "layersOrder": [{ "name": "pinkyFace" }, { "name": "head" }, { "name": "eyes" }]
@@ -83,7 +81,7 @@ You should use the config file at least for layers configuration. But there are 
     "thumbWidth": 60,
     "imageRatio": 1,
     "imageName": "preview.png"
-  },
+  }
 }
 ```
 
