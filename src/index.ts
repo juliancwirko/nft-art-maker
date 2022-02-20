@@ -48,5 +48,5 @@ if (command === COMMANDS.pack) {
 }
 
 if (command === COMMANDS.check) {
-  checkUniqGeneratedDna();
+  checkUniqGeneratedDna({ noConsole: false });
 }

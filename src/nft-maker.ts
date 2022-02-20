@@ -69,13 +69,21 @@ const getSortedMetadata = (metadataList: TempMetadata[]) => {
   return metadataList.sort((a, b) => a.edition - b.edition);
 };
 
-export const checkUniqGeneratedDna = (metadataList?: TempMetadata[]) => {
-  if (Array.isArray(metadataList) && metadataList.length > 0) {
-    return metadataList.length;
+export const checkUniqGeneratedDna = ({
+  metaList = [],
+  noConsole = true,
+}: {
+  metaList?: TempMetadata[];
+  noConsole?: boolean;
+}) => {
+  if (metaList.length > 0) {
+    return metaList.length;
   }
   const metadata = fs.readFileSync(`${buildDir}/${outputJsonFileName}`, 'utf8');
   if (metadata) {
-    return JSON.parse(metadata).editions.length;
+    const itemsLength = JSON.parse(metadata).editions.length;
+    !noConsole && console.log(`Generated ${itemsLength} uniq items!`);
+    return itemsLength;
   } else {
     console.log("Can't load main metadata file");
   }
@@ -399,9 +407,9 @@ export const startCreating = async () => {
   };
 
   console.log(
-    `Check out the output directory. Generated ${checkUniqGeneratedDna(
-      metadataList
-    )} uniq items!`
+    `Check out the output directory. Generated ${checkUniqGeneratedDna({
+      metaList: metadataList,
+    })} uniq items!`
   );
 
   writeMetaData(JSON.stringify(metadata, null, 2));
