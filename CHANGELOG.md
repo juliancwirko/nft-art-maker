@@ -1,3 +1,6 @@
+### [5.0.1](https://github.com/juliancwirko/nft-art-maker/releases/tag/v5.0.1) (2021-02-20)
+- fix the bug when there are no rarity values in the file names
+
 ### [5.0.0](https://github.com/juliancwirko/nft-art-maker/releases/tag/v5.0.0) (2021-01-05)
 - Changes in the metadata file structure, the attributes field is now in the root level
 - `shuffleLayerConfigurations` is now enabled by default - in most cases, it is desirable, but you can still disable it in the config file
