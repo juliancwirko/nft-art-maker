@@ -1,4 +1,4 @@
-### NFT art maker v5.0
+### NFT art maker v5
 
 The primary task of this tool is to generate a randomized set of images from provided PNG layers and pack them into .car files. Then you can upload them to IPFS using [nft.storage](https://nft.storage/) or other tools.
 
