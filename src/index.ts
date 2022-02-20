@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { exit, argv } from 'process';
-import { startCreating, buildSetup } from './nft-maker';
+import { startCreating, buildSetup, checkUniqGeneratedDna } from './nft-maker';
 import { executePreviewGeneration } from './create-preview';
 import { ipfsPack } from './ipfs-pack';
 import packageJson from '../package.json';
@@ -10,6 +10,7 @@ const COMMANDS = {
   generate: 'generate',
   preview: 'preview',
   pack: 'pack',
+  check: 'check',
 };
 
 const args = argv;
@@ -44,4 +45,8 @@ if (command === COMMANDS.preview) {
 
 if (command === COMMANDS.pack) {
   ipfsPack();
+}
+
+if (command === COMMANDS.check) {
+  checkUniqGeneratedDna();
 }

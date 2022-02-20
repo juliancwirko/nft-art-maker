@@ -63,10 +63,22 @@ const ctx = canvas.getContext('2d');
 
 const metadataList: TempMetadata[] = [];
 let attributesList: { trait_type: string; value: string }[] = [];
-const dnaList: string[][] = [];
+const dnaList = new Set();
 
 const getSortedMetadata = (metadataList: TempMetadata[]) => {
   return metadataList.sort((a, b) => a.edition - b.edition);
+};
+
+export const checkUniqGeneratedDna = (metadataList?: TempMetadata[]) => {
+  if (Array.isArray(metadataList) && metadataList.length > 0) {
+    return metadataList.length;
+  }
+  const metadata = fs.readFileSync(`${buildDir}/${outputJsonFileName}`, 'utf8');
+  if (metadata) {
+    return JSON.parse(metadata).editions.length;
+  } else {
+    console.log("Can't load main metadata file");
+  }
 };
 
 export const buildSetup = () => {
@@ -134,14 +146,7 @@ const layersSetup = (layersOrder: { name: string; opacity?: number }[]) => {
   return layers;
 };
 
-const saveImage = (_editionCount: number) => {
-  fs.writeFileSync(
-    `${buildDir}/${outputImagesDirName}/${_editionCount}.png`,
-    canvas.toBuffer('image/png')
-  );
-};
-
-const addMetadata = (_dna: string[], _edition: number) => {
+const prepareMetadataAndAssets = (_edition: number) => {
   const hash = createHash('sha256');
 
   const image = svgBase64DataOnly
@@ -178,15 +183,19 @@ const addMetadata = (_dna: string[], _edition: number) => {
 
   metadataList.push(tempMetadata);
 
-  attributesList = [];
-};
+  if (!svgBase64DataOnly) {
+    fs.writeFileSync(
+      `${buildDir}/${outputJsonDirName}/${_edition}.json`,
+      JSON.stringify(tempMetadata, null, 2)
+    );
 
-const saveMetaDataSingleFile = (editionCount: number) => {
-  const metadata = metadataList.find((meta) => meta.edition === editionCount);
-  fs.writeFileSync(
-    `${buildDir}/${outputJsonDirName}/${editionCount}.json`,
-    JSON.stringify(metadata, null, 2)
-  );
+    fs.writeFileSync(
+      `${buildDir}/${outputImagesDirName}/${_edition}.png`,
+      canvas.toBuffer('image/png')
+    );
+  }
+
+  attributesList = [];
 };
 
 const addAttributes = (_element: {
@@ -224,7 +233,7 @@ const drawElement = (_renderObject: {
 const constructLayerToDna = (_dna: string[] = [], _layers: Layer[] = []) => {
   const mappedDnaToLayers = _layers.map((layer, index) => {
     const selectedElement = layer.elements.find(
-      (e) => e.id == cleanDna(_dna[index])
+      (e) => e.id === cleanDna(_dna[index])
     );
     return {
       name: layer.name,
@@ -235,9 +244,8 @@ const constructLayerToDna = (_dna: string[] = [], _layers: Layer[] = []) => {
   return mappedDnaToLayers;
 };
 
-const isDnaUnique = (_DnaList: string[][] = [], _dna: string[] = []) => {
-  const foundDna = _DnaList.find((i: string[]) => i.join('') === _dna.join(''));
-  return foundDna == undefined ? true : false;
+const isDnaUnique = (_DnaList = new Set(), _dna: string[] = []) => {
+  return !_DnaList.has(_dna.join(''));
 };
 
 const createDna = (_layers: Layer[]) => {
@@ -332,8 +340,10 @@ export const startCreating = async () => {
       editionCount <= layerConfigurations[layerConfigIndex].growEditionSizeTo
     ) {
       const newDna = createDna(layers);
+
       if (isDnaUnique(dnaList, newDna)) {
         const results = constructLayerToDna(newDna, layers);
+
         const loadedElements: Promise<{
           layer: {
             opacity: number;
@@ -361,18 +371,20 @@ export const startCreating = async () => {
           renderObjectArray.forEach((renderObject) => {
             drawElement(renderObject);
           });
-          !svgBase64DataOnly && saveImage(abstractedIndexes[0]);
-          addMetadata(newDna, abstractedIndexes[0]);
-          !svgBase64DataOnly && saveMetaDataSingleFile(abstractedIndexes[0]);
+          prepareMetadataAndAssets(abstractedIndexes[0]);
         });
-        dnaList.push(newDna);
+
+        dnaList.add(newDna.join(''));
         editionCount++;
         abstractedIndexes.shift();
       } else {
         failedCount++;
         if (failedCount >= uniqueDnaTorrance) {
           console.log(
-            `You need more layers or elements to grow your edition to ${layerConfigurations[layerConfigIndex].growEditionSizeTo} artworks!`
+            `🚨 You need more layers or elements to grow your edition to ${layerConfigurations[layerConfigIndex].growEditionSizeTo} artworks! 🚨`
+          );
+          console.log(
+            '🚨 Even if the last index of the assets is equal to the whole expected collection amount, indexes are missing. Below you will find the precise amount of assets generated. 🚨'
           );
           break;
         }
@@ -381,12 +393,16 @@ export const startCreating = async () => {
     layerConfigIndex++;
   }
 
-  console.log('Finished! Check out the output directory.');
-
   const metadata = {
     editions: getSortedMetadata(metadataList),
     provenanceHash: getProvenanceHash(),
   };
+
+  console.log(
+    `Check out the output directory. Generated ${checkUniqGeneratedDna(
+      metadataList
+    )} uniq items!`
+  );
 
   writeMetaData(JSON.stringify(metadata, null, 2));
 };

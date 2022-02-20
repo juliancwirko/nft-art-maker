@@ -1,3 +1,8 @@
+### [5.1.0](https://github.com/juliancwirko/nft-art-maker/releases/tag/v5.1.0) (2021-02-20)
+- more fixes regarding how it works
+- Additional command: `check` will show how many unique assets are generated. Sometimes the names of files can be misleading when there are not enough layers to achieve the required amount of assets. This probably needs some rewrites in the future.
+- better output messages which contain the actual number of generated assets
+
 ### [5.0.1](https://github.com/juliancwirko/nft-art-maker/releases/tag/v5.0.1) (2021-02-20)
 - fix the bug when there are no rarity values in the file names
 

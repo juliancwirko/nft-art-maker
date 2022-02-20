@@ -35,6 +35,7 @@ Updating: when using npx, make sure that it takes the new version. You can alway
 #### Additionally you can:
 - generate a preview - run `npx nft-art-maker preview`
 - you can also pack files using `npx nft-art-maker pack` (always recommended!) - this will pack all files using ipfs-car into one images.car and metadata.car files, which you can upload using services like nft.storage
+- check how many unique assets is generated. Sometimes the names of files can be misleading when there are not enough layers to achieve the required amount of assets. This probably needs some rewrites in the future.
 
 **Basically, the tool offers two different outputs:**
 1. png and metadata files packed into the ipfs .car files. Base image CID will be updated in all metadata files automatically after running `nft-art-maker pack` and base CID for metadata files will be added to the summary metadata json file.
