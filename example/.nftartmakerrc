@@ -1,0 +1,38 @@
+{
+  "description": "TestWeirdFaces",
+  "tags": "faces,test,weird,stuff",
+  "format": {
+    "width": 300,
+    "height": 300
+  },
+  "layerConfigurations": [
+    {
+      "growEditionSizeTo": 192,
+      "layersOrder": [
+        {
+          "name": "face"
+        },
+        {
+          "name": "head"
+        },
+        {
+          "name": "eyes"
+        }
+      ]
+    },
+    {
+      "growEditionSizeTo": 220,
+      "layersOrder": [
+        {
+          "name": "pinky"
+        },
+        {
+          "name": "head"
+        },
+        {
+          "name": "eyes"
+        }
+      ]
+    }
+  ]
+}

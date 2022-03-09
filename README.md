@@ -188,6 +188,13 @@ layers/
     └── head8#100.png
 ```
 
+### Try the example
+
+1. Install the `nft-art-maker` globally: `npm install -g nft-art-maker`
+2. Go to the `example` directory and run `nft-art-maker generate`
+3. Check the output directory which will be created.
+4. Test other commands.
+
 #### License
 
 MIT
