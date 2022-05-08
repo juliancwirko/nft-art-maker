@@ -17,27 +17,6 @@ const format = customConfig?.config?.format || {
   height: 20,
 };
 
-// Default metadata schema for single asset.
-const defaultMetadata = {
-  name: '',
-  description: '',
-  edition: 0,
-  attributes: [
-    {
-      trait_type: '',
-      value: '',
-    },
-  ],
-  base64SvgDataUri: '',
-  image: {
-    href: '',
-    hash: '',
-    ipfsUri: '',
-    ipfsCid: '',
-    fileName: '',
-  },
-};
-
 const defaultMetadataSchemaMapper = {
   name: 'name',
   description: 'description',
@@ -114,7 +93,6 @@ const config = {
   editionNameFormat,
   shuffleLayerConfigurations,
   tags,
-  defaultMetadata,
   metadataSchemaMapper,
   defaultMetadataSchemaMapper,
 };
