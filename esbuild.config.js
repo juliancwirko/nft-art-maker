@@ -12,6 +12,6 @@ esbuild
     minify: true,
     outdir: 'build',
     platform: 'node',
-    external: ['canvas', 'svgo', 'cosmiconfig', 'ipfs-car'],
+    external: ['canvas', 'svgo', 'cosmiconfig', 'ipfs-car', 'dot-prop'],
   })
   .catch(() => process.exit(1));

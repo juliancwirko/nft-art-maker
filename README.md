@@ -4,25 +4,29 @@ The primary task of this tool is to generate a randomized set of images from pro
 
 **Please test it before using it for the real stuff. It can always be buggy.**
 
-- PNG layers for testing: https://ipfs.io/ipfs/bafkreicwfzj7f3xc6mjkyaqknd4gsosscznelpiwdtwmdp773irwuv2lqu
+- PNG layers for testing: https://ipfs.io/ipfs/bafkreicwfzj7f3xc6mjkyaqknd4gsosscznelpiwdtwmdp773irwuv2lqu (or check the [example](https://github.com/juliancwirko/nft-art-maker/tree/main/example) directory)
 - Latest walkthrough video: https://youtu.be/resGP6a7_34
 
-#### Older versions (check changelog):
-- [v4](https://github.com/juliancwirko/nft-art-maker/tree/v4.0.0)
-- [v3](https://github.com/juliancwirko/nft-art-maker/tree/v3.0.0) | [Video for v3.0](https://youtu.be/MnRjOlT60nc)
-- [v2](https://github.com/juliancwirko/nft-art-maker/tree/v2.2.2) | [Video for v2.0](https://youtu.be/A_Qw9SLVT6M)
-- [v1](https://github.com/juliancwirko/nft-art-maker/tree/v1.0.1) | [Video for v1.0](https://youtu.be/uU10k6q79P8)
+#### For older versions (check changelog):
+- [CHANGELOG](https://github.com/juliancwirko/nft-art-maker/blob/main/CHANGELOG.md)
 
 #### Based on:
 - [HashLips art engine](https://github.com/HashLips/hashlips_art_engine) - only main functionality (output metadata schema should be suitable for most of the marketplaces)
 - [Pixels to SVG](https://codepen.io/shshaw/pen/XbxvNj) - SVG code from images
 - [SVGO](https://github.com/svg/svgo) - SVG optimization and base64 data uri generation
 - [ipfs-car](https://github.com/web3-storage/ipfs-car) - optionally for handling ipfs .car archives
+- [dotProp](https://github.com/sindresorhus/dot-prop) - for better managing the metadata schema mapper
 
-This lib is a customized and simplified version of the [HashLips art engine](https://github.com/HashLips/hashlips_art_engine). If you need more options and functionality, please use HashLips.
+The random assets generation is a customized and simplified version of the [HashLips art engine](https://github.com/HashLips/hashlips_art_engine) logic. If you need more options and functionality, please use HashLips.
+
+**The tool offers two different outputs:**
+1. png and metadata files packed into the ipfs .car files. Base image CID will be updated in all metadata files automatically after running `nft-art-maker pack` and base CID for metadata files will be added to the summary metadata json file.
+2. (experimental) all data with encoded svgs in one big metadata.json file, without any additional files. This will be useful when you want to have non-standard on-chain only nfts. Be aware that the SVG output can be buggy on very complicated and big images. This experimental option is for small simple images, like pixel art etc.
+
+nft-art-maker tool doesn't assume any way of uploading to ipfs, but I would recommend [nft.storage](https://nft.storage/) where you can upload whole .car file. They offer free pinning service and Filecoin storage. So even if you delete it there or nft.storage stops working for some reason, the data will persist. Of course, learn about it first. They have a friendly UI, but you can also use the CLI tool for that.
 
 #### How to use it:
-- minimum version of Node is **14.14.0**
+- minimum version of Node is **14.14.0** doesn't work with Node **18** yet. Please use LTS version for now.
 - create a project directory -> `mkdir my-nft-collection ; cd my-nft-collection`
 - in that directory, create the `layers` directory with all of your layers split into proper directories. Read more about it below.
 - create a configuration file `.nftartmakerrc` (other file names also allowed, check out [cosmiconfig](https://github.com/davidtheclark/cosmiconfig) for more info). This file should be a JSON formatted config file. You'll find all configuration options below.
@@ -36,12 +40,6 @@ Updating: when using npx, make sure that it takes the new version. You can alway
 - generate a preview - run `npx nft-art-maker preview`
 - you can also pack files using `npx nft-art-maker pack` (always recommended!) - this will pack all files using ipfs-car into one images.car and metadata.car files, which you can upload using services like nft.storage
 - check how many unique assets is generated. `npx nft-art-maker check` Sometimes the names of files can be misleading when there are not enough layers to achieve the required amount of assets. This probably needs some rewrites in the future.
-
-**Basically, the tool offers two different outputs:**
-1. png and metadata files packed into the ipfs .car files. Base image CID will be updated in all metadata files automatically after running `nft-art-maker pack` and base CID for metadata files will be added to the summary metadata json file.
-2. (experimental) all data with encoded svgs in one big metadata.json file, without any additional files. This will be useful when you want to have non-standard on-chain only nfts. Be aware that the SVG output can be buggy on very complicated and big images. This experimental option is for small simple images, like pixel art etc.
-
-nft-art-maker tool doesn't assume any way of uploading to ipfs, but I would recommend [nft.storage](https://nft.storage/) where you can upload whole .car file. They offer free pinning service and Filecoin storage. So even if you delete it there or nft.storage stops working for some reason, the data will persist. Of course, learn about it first. They have a friendly UI, but you can also use the CLI tool for that.
 
 #### Configuration options
 
@@ -65,6 +63,18 @@ You should use the config file at least for layers configuration. But there are 
   "format": {
     "width": 20,
     "height": 20
+  },
+  "metadataSchemaMapper": {
+    "name": "name",
+    "description": "description",
+    "edition": "edition",
+    "attributes": "attributes",
+    "base64SvgDataUri": "base64SvgDataUri",
+    "image.href": "image.href",
+    "image.hash": "image.hash",
+    "image.ipfsUri": "image.ipfsUri",
+    "image.ipfsCid": "image.ipfsCid",
+    "image.fileName": "image.fileName"
   },
   "rarityDelimiter": "#",
   "uniqueDnaTorrance": 10000,
@@ -94,7 +104,7 @@ Every subdirectory in your `layers` directory should be named after the type of 
 
 Enabled by default, but you can always enable it to shuffle items from different `layerConfigurations`.
 
-##### Output type configuration
+##### Output types configuration
 
 You can decide if you want to have encoded SVGs or standard PNGs files. Use `svgBase64DataOnly` setting. **Be aware** that these are totally separate use cases, not the option to choose the file format.
 
@@ -152,6 +162,75 @@ The example of a single output metadata file (for example 1.json):
   }
 }
 ```
+
+##### Output metadata schema configuration
+
+From v5.2.0, you can modify the structure of the final metadata files. For now, if you would like to do that, you should configure all fields. Here is the default configuration (check how to use it in the .nftartmakerrc config file above):
+
+```json
+{
+  "metadataSchemaMapper": {
+    "name": "name",
+    "description": "description",
+    "edition": "edition",
+    "attributes": "attributes",
+    "base64SvgDataUri": "base64SvgDataUri",
+    "image.href": "image.href",
+    "image.hash": "image.hash",
+    "image.ipfsUri": "image.ipfsUri",
+    "image.ipfsCid": "image.ipfsCid",
+    "image.fileName": "image.fileName"
+  }
+}
+```
+
+As you can see here, we have a `key:value` object. All keys are currently required variables, which should all be in the configuration if you decide to use the `metadataSchemaMapper`.
+
+So, for example, let's change the structure to match the OpenSea requirements. Because not all fields are required by OpenSea, we will put them in a separate key.
+
+OpenSea metadata mapper proposition example:
+```json
+{
+  "metadataSchemaMapper": {
+    "name": "name",
+    "description": "description",
+    "edition": "edition",
+    "attributes": "attributes",
+    "base64SvgDataUri": "base64SvgDataUri",
+    "image.href": "external_url",
+    "image.hash": "image_additional_info.hash",
+    "image.ipfsUri": "image",
+    "image.ipfsCid": "image_additional_info.ipfsCid",
+    "image.fileName": "image_additional_info.fileName"
+  }
+}
+```
+
+We changed the `image.href` to be `external_url` in our metadata files and `image.ipfsUri` to `image` in our metadata files. We also moved all other data from the default `image` key to the separate `image_additional_info` key. So now our final structure looks like this: 
+
+OpenSea final metadata form example:
+```json
+{
+  "name": "",
+  "description": "",
+  "edition": 1,
+  "attributes": [
+    {
+      "trait_type": "",
+      "value": ""
+    }
+  ],
+  "external_url": "",
+  "image_additional_info": {
+    "hash": "",
+    "ipfsCid": "",
+    "fileName": ""
+  },
+  "image": ""
+}
+```
+
+Deployed example: https://bafybeih6ii5v2hmeqsiwzkvqqw7oearegyysr6ibgpzfgmlf3ancjtghku.ipfs.nftstorage.link/111.json
 
 **Important!**
 Some of the `image` fields will be populated appropriately after running the `pack` command. All JSON files will get an update. They will be also updated in the final `metadata.car` file. This is why it is always recommended to use the `pack` command. But you can also update all paths with your own scripts.

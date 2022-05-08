@@ -12,6 +12,7 @@ import { packToFs } from 'ipfs-car/pack/fs';
 import { FsBlockStore } from 'ipfs-car/blockstore/fs';
 import { unpackStream } from 'ipfs-car/unpack';
 import { cwd, exit } from 'process';
+import dotProp from 'dot-prop';
 import config from './config';
 
 const basePath = cwd();
@@ -93,23 +94,37 @@ const updateSummaryMetadataFile = (imagesBaseCid: string | undefined) => {
   const newMetadataFile = { ...metadataFile };
   const newEditions = [...newMetadataFile.editions];
   if (newEditions && newEditions.length && imagesBaseCid) {
-    const modifiedEditions = newEditions.map(
-      (item: {
-        image: {
-          href: string;
-          ipfsUri: string;
-          ipfsCid: string;
-          fileName: string;
-        };
-        edition: number;
-      }) => {
-        item.image.href = `https://ipfs.io/ipfs/${imagesBaseCid}/${item.edition}.png`;
-        item.image.ipfsUri = `ipfs://${imagesBaseCid}/${item.edition}.png`;
-        item.image.ipfsCid = imagesBaseCid;
-        item.image.fileName = `${item.edition}.png`;
-        return item;
-      }
-    );
+    // The metadata structure can be any type because it is configurable
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const modifiedEditions = newEditions.map((item: any) => {
+      dotProp.set(
+        item,
+        config.metadataSchemaMapper['image.href'],
+        `https://ipfs.io/ipfs/${imagesBaseCid}/${dotProp.get<number>(
+          item,
+          config.metadataSchemaMapper.edition
+        )}.png`
+      );
+      dotProp.set(
+        item,
+        config.metadataSchemaMapper['image.ipfsUri'],
+        `ipfs://${imagesBaseCid}/${dotProp.get<number>(
+          item,
+          config.metadataSchemaMapper.edition
+        )}.png`
+      );
+      dotProp.set(
+        item,
+        config.metadataSchemaMapper['image.ipfsCid'],
+        imagesBaseCid
+      );
+      dotProp.set(
+        item,
+        config.metadataSchemaMapper['image.fileName'],
+        `${dotProp.get<number>(item, config.metadataSchemaMapper.edition)}.png`
+      );
+      return item;
+    });
 
     newMetadataFile.editions = modifiedEditions;
 
@@ -126,11 +141,35 @@ const updateMetadataFiles = (imagesBaseCid: string | undefined) => {
   for (const metadataFile of metadataAssetsList) {
     const rawdata = readFileSync(`${jsonOutputDir}/${metadataFile}`);
     const fileJSON = JSON.parse(rawdata.toString());
-    fileJSON.image.href = `https://ipfs.io/ipfs/${imagesBaseCid}/${fileJSON.edition}.png`;
-    fileJSON.image.ipfsUri = `ipfs://${imagesBaseCid}/${fileJSON.edition}.png`;
-    fileJSON.image.ipfsCid = imagesBaseCid;
-    fileJSON.image.fileName = `${fileJSON.edition}.png`;
-
+    dotProp.set(
+      fileJSON,
+      config.metadataSchemaMapper['image.href'],
+      `https://ipfs.io/ipfs/${imagesBaseCid}/${dotProp.get<number>(
+        fileJSON,
+        config.metadataSchemaMapper.edition
+      )}.png`
+    );
+    dotProp.set(
+      fileJSON,
+      config.metadataSchemaMapper['image.ipfsUri'],
+      `ipfs://${imagesBaseCid}/${dotProp.get<number>(
+        fileJSON,
+        config.metadataSchemaMapper.edition
+      )}.png`
+    );
+    dotProp.set(
+      fileJSON,
+      config.metadataSchemaMapper['image.ipfsCid'],
+      imagesBaseCid
+    );
+    dotProp.set(
+      fileJSON,
+      config.metadataSchemaMapper['image.fileName'],
+      `${dotProp.get<number>(
+        fileJSON,
+        config.metadataSchemaMapper.edition
+      )}.png`
+    );
     writeFileSync(
       `${jsonOutputDir}/${metadataFile}`,
       JSON.stringify(fileJSON, null, 2)

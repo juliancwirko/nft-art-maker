@@ -5,6 +5,7 @@ import { createHash } from 'crypto';
 import { createCanvas, loadImage, Image } from 'canvas';
 import { imgToSvg } from './img-to-svg';
 import { optimize, OptimizedSvg } from 'svgo';
+import dotProp from 'dot-prop';
 import config from './config';
 
 interface LayerElement {
@@ -22,21 +23,9 @@ interface Layer {
   opacity: number;
 }
 
-interface TempMetadata {
-  name: string;
-  description: string;
-  edition: number;
-  attributes: {
-    trait_type: string;
-    value: string;
-  }[];
-  tags?: string;
-  base64SvgDataUri?: string;
-  image: {
-    href: string;
-    hash: string;
-  };
-}
+// Because the Metadata structure cany be defined by end user, probably can be improved later
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type TempMetadata = any;
 
 const {
   format,
@@ -66,7 +55,13 @@ let attributesList: { trait_type: string; value: string }[] = [];
 const dnaList = new Set();
 
 const getSortedMetadata = (metadataList: TempMetadata[]) => {
-  return metadataList.sort((a, b) => a.edition - b.edition);
+  return metadataList.sort((a, b) => {
+    const first =
+      dotProp.get<number>(a, config.metadataSchemaMapper.edition) || 0;
+    const second =
+      dotProp.get<number>(b, config.metadataSchemaMapper.edition) || 0;
+    return first - second;
+  });
 };
 
 export const checkUniqGeneratedDna = ({
@@ -167,27 +162,48 @@ const prepareMetadataAndAssets = (_edition: number) => {
 
   hash.update(dataToHash);
 
-  const tempMetadata = {
-    name: `${editionNameFormat}${_edition}`,
-    description: description,
-    edition: _edition,
-    attributes: attributesList,
-    tags: config.tags,
-    ...(svgBase64DataOnly
-      ? {
-          base64SvgDataUri: (
-            optimize(image, {
-              multipass: true,
-              datauri: 'base64',
-            }) as OptimizedSvg
-          ).data,
-        }
-      : {}),
-    image: {
-      href: !svgBase64DataOnly ? image : '',
-      hash: hash.digest('hex'),
-    },
-  };
+  const tempMetadata = {};
+
+  dotProp.set(
+    tempMetadata,
+    config.metadataSchemaMapper.name,
+    `${editionNameFormat}${_edition}`
+  );
+  dotProp.set(
+    tempMetadata,
+    config.metadataSchemaMapper.description,
+    description
+  );
+  dotProp.set(tempMetadata, config.metadataSchemaMapper.edition, _edition);
+  dotProp.set(
+    tempMetadata,
+    config.metadataSchemaMapper.attributes,
+    attributesList
+  );
+  dotProp.set(tempMetadata, config.metadataSchemaMapper.tags, config.tags);
+  dotProp.set(
+    tempMetadata,
+    config.metadataSchemaMapper['image.href'],
+    !svgBase64DataOnly ? image : ''
+  );
+  dotProp.set(
+    tempMetadata,
+    config.metadataSchemaMapper['image.hash'],
+    hash.digest('hex')
+  );
+
+  if (svgBase64DataOnly) {
+    dotProp.set(
+      tempMetadata,
+      config.metadataSchemaMapper.base64SvgDataUri,
+      (
+        optimize(image, {
+          multipass: true,
+          datauri: 'base64',
+        }) as OptimizedSvg
+      ).data
+    );
+  }
 
   metadataList.push(tempMetadata);
 
@@ -286,7 +302,12 @@ const getProvenanceHash = () => {
   const hash = createHash('sha256');
 
   const hashes = getSortedMetadata(metadataList)
-    .map((metadataObj) => metadataObj.image.hash)
+    .map((metadataObj) =>
+      dotProp.get<string>(
+        metadataObj,
+        config.metadataSchemaMapper['image.hash']
+      )
+    )
     .join('');
   hash.update(hashes);
 

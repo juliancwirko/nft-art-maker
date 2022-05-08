@@ -1,3 +1,6 @@
+### [5.2.0](https://github.com/juliancwirko/nft-art-maker/releases/tag/v5.2.0) (2022-05-08)
+- posibility to define the metadata structure
+
 ### [5.1.1](https://github.com/juliancwirko/nft-art-maker/releases/tag/v5.1.1) (2022-04-06)
 - npm audit fix
 

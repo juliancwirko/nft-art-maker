@@ -8,9 +8,7 @@ const customConfig = explorerSync.search(cwd());
 const svgBase64DataOnly =
   Boolean(customConfig?.config?.svgBase64DataOnly) || false;
 
-// layers names represents names of the directories in 'layersDirName' ('layers' by default)
-// example of the file name face1#100.png (where 100 is the max rarity level)
-// For more info check: https://github.com/HashLips/hashlips_art_engine
+// For more info check: https://github.com/juliancwirko/nft-art-maker#layers-configuration
 const layerConfigurations = customConfig?.config?.layerConfigurations;
 
 // Width and height of the image
@@ -18,6 +16,43 @@ const format = customConfig?.config?.format || {
   width: 20,
   height: 20,
 };
+
+// Default metadata schema for single asset.
+const defaultMetadata = {
+  name: '',
+  description: '',
+  edition: 0,
+  attributes: [
+    {
+      trait_type: '',
+      value: '',
+    },
+  ],
+  base64SvgDataUri: '',
+  image: {
+    href: '',
+    hash: '',
+    ipfsUri: '',
+    ipfsCid: '',
+    fileName: '',
+  },
+};
+
+const defaultMetadataSchemaMapper = {
+  name: 'name',
+  description: 'description',
+  edition: 'edition',
+  attributes: 'attributes',
+  base64SvgDataUri: 'base64SvgDataUri',
+  'image.href': 'image.href',
+  'image.hash': 'image.hash',
+  'image.ipfsUri': 'image.ipfsUri',
+  'image.ipfsCid': 'image.ipfsCid',
+  'image.fileName': 'image.fileName',
+};
+
+const metadataSchemaMapper =
+  customConfig?.config?.metadataSchemaMapper || defaultMetadataSchemaMapper;
 
 // Rarity delimiter for a file name
 const rarityDelimiter = customConfig?.config?.rarityDelimiter || '#';
@@ -79,6 +114,9 @@ const config = {
   editionNameFormat,
   shuffleLayerConfigurations,
   tags,
+  defaultMetadata,
+  metadataSchemaMapper,
+  defaultMetadataSchemaMapper,
 };
 
 export default config;
