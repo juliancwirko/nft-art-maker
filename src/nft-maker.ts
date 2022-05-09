@@ -1,11 +1,11 @@
-import path from 'path';
+import * as path from 'path';
 import { cwd, exit } from 'process';
-import fs from 'fs';
+import * as fs from 'fs';
 import { createHash } from 'crypto';
-import { createCanvas, loadImage, Image } from 'canvas';
+import { createCanvas, Image, loadImage } from 'canvas';
 import { imgToSvg } from './img-to-svg';
 import { optimize, OptimizedSvg } from 'svgo';
-import dotProp from 'dot-prop';
+import * as dotProp from 'dot-prop';
 import config from './config';
 
 interface LayerElement {
@@ -331,6 +331,10 @@ const shuffle = (array: number[]) => {
 const checkLayersGrowSizeConfigValidity = (array: number[]) =>
   array.slice(1).every((e, i) => e > array[i]);
 
+const printProgress = (editionCount: number, size: number) => {
+  process.stdout.write(`#${editionCount} of ${size} processed.\r`);
+};
+
 export const startCreating = async () => {
   let layerConfigIndex = 0;
   let editionCount = 1;
@@ -365,9 +369,9 @@ export const startCreating = async () => {
     const layers = layersSetup(
       layerConfigurations[layerConfigIndex].layersOrder
     );
-    while (
-      editionCount <= layerConfigurations[layerConfigIndex].growEditionSizeTo
-    ) {
+    const growEditionSizeTo =
+      layerConfigurations[layerConfigIndex].growEditionSizeTo;
+    while (editionCount <= growEditionSizeTo) {
       const newDna = createDna(layers);
 
       if (isDnaUnique(dnaList, newDna)) {
@@ -404,13 +408,14 @@ export const startCreating = async () => {
         });
 
         dnaList.add(newDna.join(''));
+        printProgress(editionCount, growEditionSizeTo);
         editionCount++;
         abstractedIndexes.shift();
       } else {
         failedCount++;
         if (failedCount >= uniqueDnaTorrance) {
           console.log(
-            `🚨 You need more layers or elements to grow your edition to ${layerConfigurations[layerConfigIndex].growEditionSizeTo} artworks! 🚨`
+            `🚨 You need more layers or elements to grow your edition to ${growEditionSizeTo} artworks! 🚨`
           );
           console.log(
             '🚨 Even if the last index of the assets is equal to the whole expected collection amount, indexes are missing. Below you will find the precise amount of assets generated. 🚨'

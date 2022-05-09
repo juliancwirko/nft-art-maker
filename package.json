@@ -14,7 +14,8 @@
     "build": "rimraf build && node ./esbuild.config.js && tsc",
     "dev:lint": "eslint src/** --fix",
     "dev:prettier": "prettier --write 'src/**/*.{js,ts,json}'",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "test": "jest"
   },
   "author": "Julian Ćwirko (julian.io)",
   "license": "MIT",
@@ -31,6 +32,7 @@
     "blockchain"
   ],
   "devDependencies": {
+    "@types/jest": "^27.5.0",
     "@types/node": "^16.10.3",
     "@types/svgo": "^2.6.1",
     "@typescript-eslint/eslint-plugin": "^4.27.0",
@@ -39,8 +41,10 @@
     "eslint": "^7.29.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^3.4.0",
+    "jest": "^28.1.0",
     "prettier": "^2.3.1",
     "rimraf": "^3.0.2",
+    "ts-jest": "^28.0.2",
     "typescript": "^4.4.3"
   },
   "dependencies": {
