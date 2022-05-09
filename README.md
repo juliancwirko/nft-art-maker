@@ -93,7 +93,8 @@ You should use the config file at least for layers configuration. But there are 
     "thumbWidth": 60,
     "imageRatio": 1,
     "imageName": "preview.png"
-  }
+  },
+  "nftStorageApiToken": "Your nft.storage API token"
 }
 ```
 
@@ -270,14 +271,7 @@ layers/
 
 ### Upload packed car files to nft.storage
 
-This package has a small helper to upload the packed car files to nft.storage. To archive the only requirement is:
-
-```json
-{
-  "name": "",
-  "nftStorageApiToken": "Your nft.storage API token"
-}
-```
+This package has a small helper to upload the packed car files to nft.storage. To archive the only requirement is addition in the .nftartmakerrc config file: `"nftStorageApiToken": "Your nft.storage API token"`. See the example above.
 
 ### Try the example
 

@@ -7,6 +7,7 @@ import config from '../src/config';
 import { ipfsPack } from '../src/ipfs-pack';
 import { cwd } from 'process';
 import { existsSync } from 'fs';
+import { uploadCar } from '../src/upload-car';
 
 const basePath = cwd();
 const buildDir = `${basePath}/${config.outputDirName}`;
@@ -25,5 +26,11 @@ describe('nft-maker tests', () => {
     await ipfsPack();
     expect(existsSync(packedImagesDir)).toBeTruthy();
     expect(existsSync(packedMetadataDir)).toBeTruthy();
+  });
+
+  it('Should upload the car files to nft.storage. Be sure to set the API key.', async () => {
+    const { cidMeta, cidImages } = await uploadCar();
+    expect(typeof cidMeta).toBe('string');
+    expect(typeof cidImages).toBe('string');
   });
 });

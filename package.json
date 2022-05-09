@@ -15,7 +15,7 @@
     "dev:lint": "eslint src/** --fix",
     "dev:prettier": "prettier --write 'src/**/*.{js,ts,json}'",
     "prepublishOnly": "npm run build",
-    "test": "jest"
+    "test": "cd tests && jest"
   },
   "author": "Julian Ćwirko (julian.io)",
   "license": "MIT",
