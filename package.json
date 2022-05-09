@@ -48,10 +48,12 @@
     "typescript": "^4.4.3"
   },
   "dependencies": {
+    "@ipld/car": "^4.1.2",
     "canvas": "^2.9.1",
     "cosmiconfig": "^7.0.1",
     "dot-prop": "6.0.1",
     "ipfs-car": "^0.6.1",
+    "nft.storage": "^6.2.0",
     "svgo": "^2.8.0"
   }
 }

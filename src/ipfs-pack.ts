@@ -12,7 +12,7 @@ import { packToFs } from 'ipfs-car/pack/fs';
 import { FsBlockStore } from 'ipfs-car/blockstore/fs';
 import { unpackStream } from 'ipfs-car/unpack';
 import { cwd, exit } from 'process';
-import dotProp from 'dot-prop';
+import * as dotProp from 'dot-prop';
 import config from './config';
 
 const basePath = cwd();
