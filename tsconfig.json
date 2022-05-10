@@ -10,7 +10,8 @@
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
     "types": [
-      "node"
+      "node",
+      "jest"
     ]
   }
 }

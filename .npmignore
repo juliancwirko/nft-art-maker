@@ -8,3 +8,5 @@ src
 esbuild.config.js
 tsconfig.json
 example
+tests
+jest.config.js

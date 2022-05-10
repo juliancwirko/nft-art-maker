@@ -1,16 +1,18 @@
 #!/usr/bin/env node
 
-import { exit, argv } from 'process';
-import { startCreating, buildSetup, checkUniqGeneratedDna } from './nft-maker';
+import { argv, exit } from 'process';
+import { buildSetup, checkUniqGeneratedDna, startCreating } from './nft-maker';
 import { executePreviewGeneration } from './create-preview';
 import { ipfsPack } from './ipfs-pack';
 import packageJson from '../package.json';
+import { uploadCar } from './upload-car';
 
 const COMMANDS = {
   generate: 'generate',
   preview: 'preview',
   pack: 'pack',
   check: 'check',
+  upload: 'upload',
 };
 
 const args = argv;
@@ -49,4 +51,8 @@ if (command === COMMANDS.pack) {
 
 if (command === COMMANDS.check) {
   checkUniqGeneratedDna({ noConsole: false });
+}
+
+if (command === COMMANDS.upload) {
+  uploadCar();
 }

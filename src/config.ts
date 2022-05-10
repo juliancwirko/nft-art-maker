@@ -43,6 +43,9 @@ const uniqueDnaTorrance = customConfig?.config?.uniqueDnaTorrance || 10000;
 const description =
   customConfig?.config?.description || 'Your collection name here';
 
+const nftStorageApiToken =
+  customConfig?.config?.nftStorageApiToken || 'Your nft.storage API token';
+
 // Default names for the directories and files
 const layersDirName = customConfig?.config?.layersDirName || 'layers';
 const outputDirName = customConfig?.config?.outputDirName || 'output';
@@ -95,6 +98,7 @@ const config = {
   tags,
   metadataSchemaMapper,
   defaultMetadataSchemaMapper,
+  nftStorageApiToken,
 };
 
 export default config;

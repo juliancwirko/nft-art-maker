@@ -40,6 +40,7 @@ Updating: when using npx, make sure that it takes the new version. You can alway
 - generate a preview - run `npx nft-art-maker preview`
 - you can also pack files using `npx nft-art-maker pack` (always recommended!) - this will pack all files using ipfs-car into one images.car and metadata.car files, which you can upload using services like nft.storage
 - check how many unique assets is generated. `npx nft-art-maker check` Sometimes the names of files can be misleading when there are not enough layers to achieve the required amount of assets. This probably needs some rewrites in the future.
+- upload packed car files to nft.storage. `npx nft-art-maker upload` - this will upload all packed ipfs-car files to nft.storage. Set "nftStorageApiToken" config option to your API token
 
 #### Configuration options
 
@@ -92,7 +93,8 @@ You should use the config file at least for layers configuration. But there are 
     "thumbWidth": 60,
     "imageRatio": 1,
     "imageName": "preview.png"
-  }
+  },
+  "nftStorageApiToken": "Your nft.storage API token"
 }
 ```
 
@@ -266,6 +268,10 @@ layers/
     ├── head7#100.png
     └── head8#100.png
 ```
+
+### Upload packed car files to nft.storage
+
+This package has a small helper to upload the packed car files to nft.storage. To archive the only requirement is addition in the .nftartmakerrc config file: `"nftStorageApiToken": "Your nft.storage API token"`. See the example above.
 
 ### Try the example
 
