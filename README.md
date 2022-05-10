@@ -106,7 +106,7 @@ You should use the config file at least for layers configuration. But there are 
   "outputJsonFileName": "metadata.json",
   "outputImagesCarFileName": "images.car",
   "outputMetadataCarFileName": "metadata.car",
-  "outputMetadataFileEnding": ".json",
+  "outputMetadataFileExtension": ".json",
   "editionNameFormat": "#",
   "tags": "tag1,tag2,tag3",
   "preview": {
