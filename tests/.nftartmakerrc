@@ -7,6 +7,7 @@
   },
   "layersDirName": "../example/layers",
   "outputDirName": "../example/output",
+  "outputMetadataFileEnding": "",
   "layerConfigurations": [
     {
       "growEditionSizeTo": 192,

@@ -5,6 +5,7 @@
     "width": 300,
     "height": 300
   },
+  "outputMetadataFileEnding": "",
   "layerConfigurations": [
     {
       "growEditionSizeTo": 192,

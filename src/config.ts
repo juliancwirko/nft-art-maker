@@ -60,6 +60,10 @@ const outputImagesCarFileName =
   customConfig?.config?.outputCarFileName || 'images.car';
 const outputMetadataCarFileName =
   customConfig?.config?.outputCarFileName || 'metadata.car';
+const outputMetadataFileEnding =
+  typeof customConfig?.config?.outputMetadataFileEnding === 'string'
+    ? customConfig?.config?.outputMetadataFileEnding
+    : '.json';
 
 const editionNameFormat = customConfig?.config?.editionNameFormat || '#';
 
@@ -99,6 +103,7 @@ const config = {
   metadataSchemaMapper,
   defaultMetadataSchemaMapper,
   nftStorageApiToken,
+  outputMetadataFileEnding,
 };
 
 export default config;
