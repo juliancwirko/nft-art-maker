@@ -19,6 +19,7 @@ export const uploadCar = async () => {
   console.log('Uploading...');
   const cidMeta = await storage.storeCar(carReaderMetadata);
   const cidImages = await storage.storeCar(carReaderImages);
-  console.log(`CID of metadata: ${cidMeta}. CID of images: ${cidImages}`);
+  console.log(`CID of metadata: ${cidMeta}`);
+  console.log(`CID of images: ${cidImages}`);
   return { cidMeta, cidImages };
 };
