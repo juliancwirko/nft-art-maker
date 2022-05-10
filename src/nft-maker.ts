@@ -210,7 +210,7 @@ const prepareMetadataAndAssets = (_edition: number) => {
 
   if (!svgBase64DataOnly) {
     fs.writeFileSync(
-      `${buildDir}/${outputJsonDirName}/${_edition}${outputMetadataFileExtension.toString()}`,
+      `${buildDir}/${outputJsonDirName}/${_edition}${outputMetadataFileExtension}`,
       JSON.stringify(tempMetadata, null, 2)
     );
 
