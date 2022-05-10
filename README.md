@@ -44,7 +44,7 @@ Updating: when using npx, make sure that it takes the new version. You can alway
 
 #### Configuration options
 
-You should use the config file at least for layers configuration. But there are also other configuration options. Whole config example: 
+You should use the config file at least for layers configuration. But there are also other configuration options. Whole config example:
 
 ```json
 {
@@ -53,11 +53,31 @@ You should use the config file at least for layers configuration. But there are 
   "layerConfigurations": [
     {
       "growEditionSizeTo": 100,
-      "layersOrder": [{ "name": "face" }, { "name": "head" }, { "name": "eyes" }]
+      "layersOrder": [
+        {
+          "name": "face"
+        },
+        {
+          "name": "head"
+        },
+        {
+          "name": "eyes"
+        }
+      ]
     },
     {
       "growEditionSizeTo": 110,
-      "layersOrder": [{ "name": "pinkyFace" }, { "name": "head" }, { "name": "eyes" }]
+      "layersOrder": [
+        {
+          "name": "pinkyFace"
+        },
+        {
+          "name": "head"
+        },
+        {
+          "name": "eyes"
+        }
+      ]
     }
   ],
   "shuffleLayerConfigurations": false,
@@ -86,6 +106,7 @@ You should use the config file at least for layers configuration. But there are 
   "outputJsonFileName": "metadata.json",
   "outputImagesCarFileName": "images.car",
   "outputMetadataCarFileName": "metadata.car",
+  "outputMetadataFileEnding": ".json",
   "editionNameFormat": "#",
   "tags": "tag1,tag2,tag3",
   "preview": {

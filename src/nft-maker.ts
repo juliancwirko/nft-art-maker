@@ -41,6 +41,7 @@ const {
   outputImagesDirName,
   editionNameFormat,
   shuffleLayerConfigurations,
+  outputMetadataFileEnding,
 } = config;
 
 const basePath = cwd();
@@ -209,7 +210,7 @@ const prepareMetadataAndAssets = (_edition: number) => {
 
   if (!svgBase64DataOnly) {
     fs.writeFileSync(
-      `${buildDir}/${outputJsonDirName}/${_edition}.json`,
+      `${buildDir}/${outputJsonDirName}/${_edition}${outputMetadataFileEnding}`,
       JSON.stringify(tempMetadata, null, 2)
     );
 
