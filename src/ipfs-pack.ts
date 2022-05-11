@@ -1,12 +1,12 @@
 import {
+  accessSync,
+  constants,
   createReadStream,
   existsSync,
   mkdirSync,
+  readdirSync,
   readFileSync,
   writeFileSync,
-  accessSync,
-  constants,
-  readdirSync,
 } from 'fs';
 import { packToFs } from 'ipfs-car/pack/fs';
 import { FsBlockStore } from 'ipfs-car/blockstore/fs';
@@ -96,33 +96,27 @@ const updateSummaryMetadataFile = (imagesBaseCid: string | undefined) => {
   if (newEditions && newEditions.length && imagesBaseCid) {
     // The metadata structure can be any type because it is configurable
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const modifiedEditions = newEditions.map((item: any) => {
+    const modifiedEditions = newEditions.map((item: any, iteration) => {
+      const edition = config.metadataSchemaMapper.edition
+        ? dotProp.get<number>(item, config.metadataSchemaMapper.edition)
+        : iteration + 1;
       dotProp.set(
         item,
         config.metadataSchemaMapper['image.href'],
-        `https://ipfs.io/ipfs/${imagesBaseCid}/${dotProp.get<number>(
-          item,
-          config.metadataSchemaMapper.edition
-        )}.png`
+        `https://ipfs.io/ipfs/${imagesBaseCid}/${edition}.png`
       );
       dotProp.set(
         item,
         config.metadataSchemaMapper['image.ipfsUri'],
-        `ipfs://${imagesBaseCid}/${dotProp.get<number>(
-          item,
-          config.metadataSchemaMapper.edition
-        )}.png`
+        `ipfs://${imagesBaseCid}/${edition}.png`
       );
       dotProp.set(
         item,
         config.metadataSchemaMapper['image.ipfsCid'],
         imagesBaseCid
       );
-      dotProp.set(
-        item,
-        config.metadataSchemaMapper['image.fileName'],
-        `${dotProp.get<number>(item, config.metadataSchemaMapper.edition)}.png`
-      );
+      const imageFilename = config.metadataSchemaMapper['image.fileName'];
+      dotProp.set(item, imageFilename, `${edition}.png`);
       return item;
     });
 
