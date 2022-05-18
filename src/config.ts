@@ -81,6 +81,10 @@ const preview = customConfig?.config?.preview || {
 // Tags for your collection as string. Format: 'tag1,tag2,tag3'.
 const tags = customConfig?.config?.tags || '';
 
+// Additional metadata for the collection (not from layers)
+const additionalTraitsFileName =
+  customConfig?.config?.additionalTraitsFileName || '';
+
 const config = {
   format,
   description,
@@ -104,6 +108,7 @@ const config = {
   defaultMetadataSchemaMapper,
   nftStorageApiToken,
   outputMetadataFileExtension,
+  additionalTraitsFileName,
 };
 
 export default config;
