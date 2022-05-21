@@ -1,3 +1,7 @@
+### [5.3.2](https://github.com/juliancwirko/nft-art-maker/releases/tag/v5.3.2) (2022-05-21)
+- Improvements for upload functionality: It sometimes hangs with massive files, a couple of GB. These improvements should fix it, but we should monitor that further because it depends on the network and IPFS responsiveness at the moment of sending.
+- Added a simple progress indicator.
+
 ### [5.3.1](https://github.com/juliancwirko/nft-art-maker/releases/tag/v5.3.1) (2022-05-10)
 - possibility to configure the metadata files extension, by default `.json`, it can also be set to empty string, so no extension. Thanks to @dohomi.
 
