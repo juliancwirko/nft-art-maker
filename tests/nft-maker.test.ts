@@ -29,8 +29,8 @@ describe('nft-maker tests', () => {
   });
 
   it('Should upload the car files to nft.storage. Be sure to set the API key.', async () => {
-    const { cidMeta, cidImages } = await uploadCar();
-    expect(typeof cidMeta).toBe('string');
-    expect(typeof cidImages).toBe('string');
+    const result = await uploadCar();
+    expect(result?.cidMeta.length).toBeGreaterThan(0);
+    expect(result?.cidImages.length).toBeGreaterThan(0);
   });
 });
