@@ -206,6 +206,9 @@ export const ipfsPack = async () => {
   }
 };
 
+// The function is not part of the standard flow and should be used only when you don't want to use the pack and upload functions. 
+// Meaning that you want to handle it by yourself.
+// Then, you need to upload images, get the CID and update all metadata JSON files using this function.
 export const updateMetadataImageCID = async () => {
   const imageCid = config.overwriteImageCID;
 
