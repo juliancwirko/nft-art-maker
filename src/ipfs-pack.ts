@@ -135,21 +135,16 @@ const updateMetadataFiles = (imagesBaseCid: string | undefined) => {
   for (const metadataFile of metadataAssetsList) {
     const rawdata = readFileSync(`${jsonOutputDir}/${metadataFile}`);
     const fileJSON = JSON.parse(rawdata.toString());
+    const edition = metadataFile;
     dotProp.set(
       fileJSON,
       config.metadataSchemaMapper['image.href'],
-      `https://ipfs.io/ipfs/${imagesBaseCid}/${dotProp.get<number>(
-        fileJSON,
-        config.metadataSchemaMapper.edition
-      )}.png`
+      `https://ipfs.io/ipfs/${imagesBaseCid}/${edition}.png`
     );
     dotProp.set(
       fileJSON,
       config.metadataSchemaMapper['image.ipfsUri'],
-      `ipfs://${imagesBaseCid}/${dotProp.get<number>(
-        fileJSON,
-        config.metadataSchemaMapper.edition
-      )}.png`
+      `ipfs://${imagesBaseCid}/${edition}.png`
     );
     dotProp.set(
       fileJSON,
@@ -159,10 +154,7 @@ const updateMetadataFiles = (imagesBaseCid: string | undefined) => {
     dotProp.set(
       fileJSON,
       config.metadataSchemaMapper['image.fileName'],
-      `${dotProp.get<number>(
-        fileJSON,
-        config.metadataSchemaMapper.edition
-      )}.png`
+      `${edition}.png`
     );
     writeFileSync(
       `${jsonOutputDir}/${metadataFile}`,
@@ -212,4 +204,19 @@ export const ipfsPack = async () => {
   } catch (e) {
     console.log(`Ipfs pack: ${(e as unknown as Error).message}`);
   }
+};
+
+export const updateMetadataImageCID = async () => {
+  const imageCid = config.overwriteImageCID;
+
+  if (!imageCid) {
+    console.log(
+      'There is no "updateImageCid" config option set. Task will exit without rewriting files.'
+    );
+    return;
+  }
+  updateMetadataFiles(imageCid);
+  updateSummaryMetadataFile(imageCid);
+
+  console.log('Done! Check the output directory.');
 };

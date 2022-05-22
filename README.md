@@ -41,6 +41,7 @@ Updating: when using npx, make sure that it takes the new version. You can alway
 - you can also pack files using `npx nft-art-maker pack` (always recommended!) - this will pack all files using ipfs-car into one images.car and metadata.car files, which you can upload using services like nft.storage
 - check how many unique assets is generated. `npx nft-art-maker check` Sometimes the names of files can be misleading when there are not enough layers to achieve the required amount of assets. This probably needs some rewrites in the future.
 - upload packed car files to nft.storage. `npx nft-art-maker upload` - this will upload all packed ipfs-car files to nft.storage. Set "nftStorageApiToken" config option to your API token
+- overwrite image CID. `npx nft-art-maker updateImageCID` - this will update all metadata files based on the config option `overwriteImageCID`
 
 #### Configuration options
 
@@ -115,7 +116,8 @@ You should use the config file at least for layers configuration. But there are 
     "imageRatio": 1,
     "imageName": "preview.png"
   },
-  "nftStorageApiToken": "Your nft.storage API token"
+  "nftStorageApiToken": "Your nft.storage API token",
+  "overwriteImageCID": "Your image CID after upload to your IPFS storage."
 }
 ```
 
@@ -293,6 +295,17 @@ layers/
 ### Upload packed car files to nft.storage
 
 This package has a small helper to upload the packed car files to nft.storage. To archive the only requirement is addition in the .nftartmakerrc config file: `"nftStorageApiToken": "Your nft.storage API token"`. See the example above.
+
+
+### Upload image folder with NFT UP or Pinata (or any other 3rd party IPFS storage provider.)
+
+In case you are dealing with a very large collection and the ipfs upload failed for some reasons you can first upload the images to an IPFS provider.
+
+After you received the CID of the image location following steps are required: 
+
+1. update your config file `overwriteImageCID` option with your CID.
+2. run `nft-art-maker updateImageCID` which will re-generate your metadata files with the image CID.
+3. upload your metadata json folder to your preferred location. 
 
 ### Try the example
 

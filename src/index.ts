@@ -3,7 +3,7 @@
 import { argv, exit } from 'process';
 import { buildSetup, checkUniqGeneratedDna, startCreating } from './nft-maker';
 import { executePreviewGeneration } from './create-preview';
-import { ipfsPack } from './ipfs-pack';
+import { ipfsPack, updateMetadataImageCID } from './ipfs-pack';
 import packageJson from '../package.json';
 import { uploadCar } from './upload-car';
 
@@ -13,6 +13,7 @@ const COMMANDS = {
   pack: 'pack',
   check: 'check',
   upload: 'upload',
+  updateImageCID: 'updateImageCID',
 };
 
 const args = argv;
@@ -55,4 +56,8 @@ if (command === COMMANDS.check) {
 
 if (command === COMMANDS.upload) {
   uploadCar();
+}
+
+if (command === COMMANDS.updateImageCID) {
+  updateMetadataImageCID();
 }
