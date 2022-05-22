@@ -23,7 +23,7 @@ interface Layer {
   opacity: number;
 }
 
-// Because the Metadata structure cany be defined by end user, probably can be improved later
+// Because the Metadata structure can be defined by end user, probably can be improved later
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type TempMetadata = any;
 
@@ -42,6 +42,7 @@ const {
   editionNameFormat,
   shuffleLayerConfigurations,
   outputMetadataFileExtension,
+  additionalTraitsFileName,
 } = config;
 
 const basePath = cwd();
@@ -65,7 +66,7 @@ const getSortedMetadata = (metadataList: TempMetadata[]) => {
   });
 };
 
-export const checkUniqGeneratedDna = ({
+export const checkUniqueGeneratedDna = ({
   metaList = [],
   noConsole = true,
 }: {
@@ -78,7 +79,7 @@ export const checkUniqGeneratedDna = ({
   const metadata = fs.readFileSync(`${buildDir}/${outputJsonFileName}`, 'utf8');
   if (metadata) {
     const itemsLength = JSON.parse(metadata).editions.length;
-    !noConsole && console.log(`Generated ${itemsLength} uniq items!`);
+    !noConsole && console.log(`Generated ${itemsLength} unique items!`);
     return itemsLength;
   } else {
     console.log("Can't load main metadata file");
@@ -94,7 +95,7 @@ export const buildSetup = () => {
   }
 
   if (fs.existsSync(buildDir)) {
-    fs.rmSync(buildDir, { recursive: true, force: true });
+    fs.rmdirSync(buildDir, { recursive: true });
   }
   fs.mkdirSync(buildDir);
   !svgBase64DataOnly &&
@@ -162,6 +163,21 @@ const prepareMetadataAndAssets = (_edition: number) => {
     : canvas.toBuffer('image/png');
 
   hash.update(dataToHash);
+
+  if (attributesList.length > 0 && additionalTraitsFileName != '') {
+    const additionalTraits = fs.readFileSync(
+      `${layersDir}/${additionalTraitsFileName}`,
+      'utf8'
+    );
+    const traitsList = JSON.parse(additionalTraits);
+    const trait = traitsList[Math.floor(Math.random() * traitsList.length)];
+    Object.keys(trait).forEach((key) => {
+      attributesList.push({
+        trait_type: key,
+        value: trait[key],
+      });
+    });
+  }
 
   const tempMetadata = {};
 
@@ -434,9 +450,9 @@ export const startCreating = async () => {
   };
 
   console.log(
-    `Check out the output directory. Generated ${checkUniqGeneratedDna({
+    `Check out the output directory. Generated ${checkUniqueGeneratedDna({
       metaList: metadataList,
-    })} uniq items!`
+    })} unique items!`
   );
 
   writeMetaData(JSON.stringify(metadata, null, 2));
