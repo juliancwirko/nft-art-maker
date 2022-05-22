@@ -5,8 +5,9 @@
     "width": 300,
     "height": 300
   },
-  "layersDirName": "../example/layers",
-  "outputDirName": "../example/output",
+  "layersDirName": "./example/layers",
+  "outputDirName": "./example/output",
+  "outputMetadataFileExtension": "",
   "layerConfigurations": [
     {
       "growEditionSizeTo": 192,
@@ -37,5 +38,6 @@
       ]
     }
   ],
-  "nftStorageApiToken": ""
+  "nftStorageApiToken": "",
+  "overwriteImageCID": "abcd"
 }

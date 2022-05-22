@@ -4,7 +4,7 @@ import {
   startCreating,
 } from '../src/nft-maker';
 import config from '../src/config';
-import { ipfsPack } from '../src/ipfs-pack';
+import { ipfsPack, updateMetadataImageCID } from '../src/ipfs-pack';
 import { cwd } from 'process';
 import { existsSync } from 'fs';
 import { uploadCar } from '../src/upload-car';
@@ -32,5 +32,9 @@ describe('nft-maker tests', () => {
     const result = await uploadCar();
     expect(result?.cidMeta.length).toBeGreaterThan(0);
     expect(result?.cidImages.length).toBeGreaterThan(0);
+  });
+
+  it('generate examples and rename CID based on "updateImageCid"', async () => {
+    await updateMetadataImageCID();
   });
 });

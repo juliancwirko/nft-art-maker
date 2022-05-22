@@ -65,6 +65,8 @@ const outputMetadataFileExtension =
     ? customConfig?.config?.outputMetadataFileExtension
     : '.json';
 
+const overwriteImageCID = customConfig?.config?.overwriteImageCID;
+
 const editionNameFormat = customConfig?.config?.editionNameFormat || '#';
 
 const shuffleLayerConfigurations =
@@ -104,6 +106,7 @@ const config = {
   defaultMetadataSchemaMapper,
   nftStorageApiToken,
   outputMetadataFileExtension,
+  overwriteImageCID,
 };
 
 export default config;
