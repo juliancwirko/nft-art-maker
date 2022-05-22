@@ -135,7 +135,7 @@ const updateMetadataFiles = (imagesBaseCid: string | undefined) => {
   for (const metadataFile of metadataAssetsList) {
     const rawdata = readFileSync(`${jsonOutputDir}/${metadataFile}`);
     const fileJSON = JSON.parse(rawdata.toString());
-    const edition = metadataFile;
+    const edition = metadataFile.split('.')[0];
     dotProp.set(
       fileJSON,
       config.metadataSchemaMapper['image.href'],
@@ -206,7 +206,7 @@ export const ipfsPack = async () => {
   }
 };
 
-// The function is not part of the standard flow and should be used only when you don't want to use the pack and upload functions. 
+// The function is not part of the standard flow and should be used only when you don't want to use the pack and upload functions.
 // Meaning that you want to handle it by yourself.
 // Then, you need to upload images, get the CID and update all metadata JSON files using this function.
 export const updateMetadataImageCID = async () => {

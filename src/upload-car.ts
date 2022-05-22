@@ -10,17 +10,25 @@ const packedOutputDir = `${buildDir}/${config.outputPackedDirName}`;
 
 const packedImagesCarFile = `${packedOutputDir}/${config.outputImagesCarFileName}`;
 const packedMetadataCarFile = `${packedOutputDir}/${config.outputMetadataCarFileName}`;
-const imagesCarFileSize = fs.statSync(packedImagesCarFile)?.size;
-const metadataCarFileSize = fs.statSync(packedMetadataCarFile)?.size;
 
 const storage = new NFTStorage({ token: config.nftStorageApiToken });
 
 export const uploadCar = async () => {
+  if (
+    !fs.existsSync(packedImagesCarFile) ||
+    !fs.existsSync(packedMetadataCarFile)
+  ) {
+    exit(9);
+  }
+
+  if (!config.nftStorageApiToken) {
+    console.log('Please provide your NFT.Storage API key.');
+    exit(9);
+  }
+
   try {
-    if (!config.nftStorageApiToken) {
-      console.log('Please provide your NFT.Storage API key.');
-      exit(9);
-    }
+    const imagesCarFileSize = fs.statSync(packedImagesCarFile)?.size;
+    const metadataCarFileSize = fs.statSync(packedMetadataCarFile)?.size;
     let metadataSize = 0.01;
     let imagesSize = 0.01;
     const carReaderMetadata = await CarIndexedReader.fromFile(
