@@ -25,6 +25,17 @@ The random assets generation is a customized and simplified version of the [Hash
 
 nft-art-maker tool doesn't assume any way of uploading to ipfs, but I would recommend [nft.storage](https://nft.storage/) where you can upload whole .car file. They offer free pinning service and Filecoin storage. So even if you delete it there or nft.storage stops working for some reason, the data will persist. Of course, learn about it first. They have a friendly UI, but you can also use the CLI tool for that.
 
+### Table of Contents  
+- [How to use it](#how-to-use-it)  
+- [Configuration options](#configuration-options)
+- [Layers configuration](#layers-configuration)
+- [Shuffle layers](#shufflelayerconfigurations)
+- [Output types](#output-types-configuration)
+- [Output metadata schema configuration](#output-metadata-schema-configuration)
+- [Layers directory structure (example)](#layers-directory-structure-example)
+- [Upload packed car files to nft.storage](#upload-packed-car-files-to-nftstorage)
+- [Try the example](#try-the-example)
+
 #### How to use it:
 - minimum version of Node is **14.14.0** doesn't work with Node **18** yet. Please use LTS version for now.
 - create a project directory -> `mkdir my-nft-collection ; cd my-nft-collection`
