@@ -211,7 +211,7 @@ export const updateMetadataImageCID = async () => {
 
   if (!imageCid) {
     console.log(
-      'There is no "updateImageCid" config option set. Task will exit without rewriting files.'
+      'There is no "overwriteImageCID" config option set. Task will exit without rewriting files.'
     );
     return;
   }
