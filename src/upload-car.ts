@@ -2,7 +2,7 @@ import config from './config';
 import { NFTStorage } from 'nft.storage';
 import { CarIndexedReader } from '@ipld/car';
 import { cwd, exit } from 'process';
-import fs from 'fs';
+import * as fs from 'fs';
 
 const basePath = cwd();
 const buildDir = `${basePath}/${config.outputDirName}`;

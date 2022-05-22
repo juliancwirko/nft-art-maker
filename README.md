@@ -34,6 +34,7 @@ nft-art-maker tool doesn't assume any way of uploading to ipfs, but I would reco
 - [Output metadata schema configuration](#output-metadata-schema-configuration)
 - [Layers directory structure (example)](#layers-directory-structure-example)
 - [Upload packed car files to nft.storage](#upload-packed-car-files-to-nftstorage)
+- [Update images base CID](#update-images-base-cid)
 - [Try the example](#try-the-example)
 
 #### How to use it:
@@ -307,8 +308,9 @@ layers/
 
 This package has a small helper to upload the packed car files to nft.storage. To archive the only requirement is addition in the .nftartmakerrc config file: `"nftStorageApiToken": "Your nft.storage API token"`. See the example above.
 
+### Update images base CID
 
-### Upload image folder with NFT UP or Pinata (or any other 3rd party IPFS storage provider.)
+This is useful when you want to upload image folder with NFT UP or Pinata (or any other 3rd party IPFS storage provider.)
 
 In case you are dealing with a very large collection and the ipfs upload failed for some reasons you can first upload the images to an IPFS provider.
 

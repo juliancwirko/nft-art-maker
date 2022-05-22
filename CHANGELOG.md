@@ -1,3 +1,8 @@
+### [5.4.0](https://github.com/juliancwirko/nft-art-maker/releases/tag/v5.4.0) (2022-05-22)
+- `nft-art-maker updateImageCID`possibility to update the CIDs when you don't want to use the `nft-art-maker pack` and `nft-art-maker upload` commands. This is additional way of doing the same operations. Remember to provide the CID in the configuration file using the `overwriteImageCID` key.
+- the `edition` field is now optional
+- thanks to @dohomi for your awesome contribution
+
 ### [5.3.2](https://github.com/juliancwirko/nft-art-maker/releases/tag/v5.3.2) (2022-05-21)
 - Improvements for upload functionality: It sometimes hangs with massive files, a couple of GB. These improvements should fix it, but we should monitor that further because it depends on the network and IPFS responsiveness at the moment of sending.
 - Added a simple progress indicator.
