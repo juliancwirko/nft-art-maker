@@ -86,6 +86,7 @@ export const imgToSvg = (img: Img) => {
           }
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
+          // eslint-disable-next-line @typescript-eslint/no-this-alias
           curPath = this;
         }
       });

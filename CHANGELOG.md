@@ -1,3 +1,7 @@
+### [6.0.0](https://github.com/juliancwirko/nft-art-maker/releases/tag/v6.0.0) (2022-08-07)
+- update dependencies
+- changed the build process, to be able to use the newest versions of dependencies. This is why it is a major version
+
 ### [5.4.0](https://github.com/juliancwirko/nft-art-maker/releases/tag/v5.4.0) (2022-05-22)
 - `nft-art-maker updateImageCID`possibility to update the CID when you don't want to use the `nft-art-maker pack` and `nft-art-maker upload` commands. It is an additional way of doing the same operations. Remember to provide the CID in the configuration file using the `overwriteImageCID` key.
 - the `edition` field is now optional

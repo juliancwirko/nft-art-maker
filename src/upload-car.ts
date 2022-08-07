@@ -62,6 +62,7 @@ export const uploadCar = async () => {
     console.log(`CID of images: ${cidImages}`);
     return { cidMeta, cidImages };
   } catch (e) {
-    console.log(e);
+    const err = e as Error;
+    console.log(err?.message);
   }
 };

@@ -311,6 +311,8 @@ This package has a small helper to upload the packed car files to nft.storage. T
 
 ### Update images base CID
 
+**Important!** It is not a part of the standard flow! `pack` command will do this for you too.
+
 This is useful when you want to upload image folder with NFT UP or Pinata (or any other 3rd party IPFS storage provider.)
 
 In case you are dealing with a very large collection and the ipfs upload failed for some reasons you can first upload the images to an IPFS provider.
@@ -327,6 +329,14 @@ After you received the CID of the image location following steps are required:
 2. Go to the `example` directory and run `nft-art-maker generate`
 3. Check the output directory which will be created.
 4. Test other commands.
+
+### Development
+
+1. clone the repository
+2. run `npm install`
+3. link the package locally `npm link`
+4. rebuild the project with every change `npm run build`
+5. you can run tests by `npm run test` (more integration than unit, you would need to provide the nft.storage api key in the `tests/.nftartmakerrc`)
 
 #### License
 

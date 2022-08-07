@@ -12,7 +12,7 @@ import { packToFs } from 'ipfs-car/pack/fs';
 import { FsBlockStore } from 'ipfs-car/blockstore/fs';
 import { unpackStream } from 'ipfs-car/unpack';
 import { cwd, exit } from 'process';
-import * as dotProp from 'dot-prop';
+import { getProperty, setProperty } from 'dot-prop';
 import config from './config';
 
 const basePath = cwd();
@@ -94,31 +94,34 @@ const updateSummaryMetadataFile = (imagesBaseCid: string | undefined) => {
   const newMetadataFile = { ...metadataFile };
   const newEditions = [...newMetadataFile.editions];
   if (newEditions && newEditions.length && imagesBaseCid) {
-    // The metadata structure can be any type because it is configurable
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const modifiedEditions = newEditions.map((item: any, iteration) => {
-      const edition = config.metadataSchemaMapper.edition
-        ? dotProp.get<number>(item, config.metadataSchemaMapper.edition)
-        : iteration + 1;
-      dotProp.set(
-        item,
-        config.metadataSchemaMapper['image.href'],
-        `https://ipfs.io/ipfs/${imagesBaseCid}/${edition}.png`
-      );
-      dotProp.set(
-        item,
-        config.metadataSchemaMapper['image.ipfsUri'],
-        `ipfs://${imagesBaseCid}/${edition}.png`
-      );
-      dotProp.set(
-        item,
-        config.metadataSchemaMapper['image.ipfsCid'],
-        imagesBaseCid
-      );
-      const imageFilename = config.metadataSchemaMapper['image.fileName'];
-      dotProp.set(item, imageFilename, `${edition}.png`);
-      return item;
-    });
+    const modifiedEditions = newEditions.map(
+      (item: Record<string, unknown>, iteration) => {
+        const edition = config.metadataSchemaMapper.edition
+          ? getProperty<Record<string, unknown>, string>(
+              item,
+              config.metadataSchemaMapper.edition
+            )
+          : iteration + 1;
+        setProperty(
+          item,
+          config.metadataSchemaMapper['image.href'],
+          `https://ipfs.io/ipfs/${imagesBaseCid}/${edition}.png`
+        );
+        setProperty(
+          item,
+          config.metadataSchemaMapper['image.ipfsUri'],
+          `ipfs://${imagesBaseCid}/${edition}.png`
+        );
+        setProperty(
+          item,
+          config.metadataSchemaMapper['image.ipfsCid'],
+          imagesBaseCid
+        );
+        const imageFilename = config.metadataSchemaMapper['image.fileName'];
+        setProperty(item, imageFilename, `${edition}.png`);
+        return item;
+      }
+    );
 
     newMetadataFile.editions = modifiedEditions;
 
@@ -136,22 +139,22 @@ const updateMetadataFiles = (imagesBaseCid: string | undefined) => {
     const rawdata = readFileSync(`${jsonOutputDir}/${metadataFile}`);
     const fileJSON = JSON.parse(rawdata.toString());
     const edition = metadataFile.split('.')[0];
-    dotProp.set(
+    setProperty(
       fileJSON,
       config.metadataSchemaMapper['image.href'],
       `https://ipfs.io/ipfs/${imagesBaseCid}/${edition}.png`
     );
-    dotProp.set(
+    setProperty(
       fileJSON,
       config.metadataSchemaMapper['image.ipfsUri'],
       `ipfs://${imagesBaseCid}/${edition}.png`
     );
-    dotProp.set(
+    setProperty(
       fileJSON,
       config.metadataSchemaMapper['image.ipfsCid'],
       imagesBaseCid
     );
-    dotProp.set(
+    setProperty(
       fileJSON,
       config.metadataSchemaMapper['image.fileName'],
       `${edition}.png`

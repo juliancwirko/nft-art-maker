@@ -1,5 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const esbuild = require('esbuild');
+import esbuild from 'esbuild';
 
 esbuild
   .build({
@@ -9,6 +9,7 @@ esbuild
       './src/ipfs-pack.ts',
       './src/upload-car.ts',
     ],
+    format: 'esm',
     bundle: true,
     minify: true,
     outdir: 'build',

@@ -9,6 +9,8 @@
     "moduleResolution": "Node",
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
+    "allowJs": true,
+    "esModuleInterop": true,
     "types": [
       "node",
       "jest"

@@ -1,10 +1,11 @@
 {
   "name": "nft-art-maker",
   "engines": {
-    "node": "^14.14.0 || ^16.0.0 || ^17.0.0"
+    "node": "^14.14.0 || ^16.0.0 || >=17.0.0"
   },
+  "type": "module",
   "types": "build/types",
-  "version": "5.4.0",
+  "version": "6.0.0",
   "description": "NFT Art Maker - generates images and metadata files and packs them into IPFS CAR files, all from provided PNG layers.",
   "main": "build/index.js",
   "bin": {
@@ -32,28 +33,29 @@
     "blockchain"
   ],
   "devDependencies": {
-    "@types/jest": "^27.5.0",
-    "@types/node": "^16.10.3",
-    "@types/svgo": "^2.6.1",
-    "@typescript-eslint/eslint-plugin": "^4.27.0",
-    "@typescript-eslint/parser": "^4.27.0",
-    "esbuild": "^0.13.4",
-    "eslint": "^7.29.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-prettier": "^3.4.0",
-    "jest": "^28.1.0",
-    "prettier": "^2.3.1",
+    "@jest/types": "^28.1.3",
+    "@types/jest": "^28.1.6",
+    "@types/node": "^18.6.4",
+    "@types/svgo": "^2.6.3",
+    "@typescript-eslint/eslint-plugin": "^5.32.0",
+    "@typescript-eslint/parser": "^5.32.0",
+    "esbuild": "^0.14.53",
+    "eslint": "^8.21.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "jest": "^28.1.3",
+    "prettier": "^2.7.1",
     "rimraf": "^3.0.2",
-    "ts-jest": "^28.0.2",
-    "typescript": "^4.4.3"
+    "ts-jest": "^28.0.7",
+    "typescript": "^4.7.4"
   },
   "dependencies": {
-    "@ipld/car": "^4.1.2",
-    "canvas": "^2.9.1",
+    "@ipld/car": "^4.1.4",
+    "canvas": "^2.9.3",
     "cosmiconfig": "^7.0.1",
-    "dot-prop": "6.0.1",
-    "ipfs-car": "^0.6.1",
-    "nft.storage": "^6.2.0",
+    "dot-prop": "^7.2.0",
+    "ipfs-car": "^0.8.1",
+    "nft.storage": "^7.0.0",
     "svgo": "^2.8.0"
   }
 }

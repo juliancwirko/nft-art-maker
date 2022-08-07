@@ -1,7 +1,7 @@
 import { cwd } from 'process';
 import * as fs from 'fs';
 import { createCanvas, loadImage, Image } from 'canvas';
-import * as dotProp from 'dot-prop';
+import { getProperty } from 'dot-prop';
 import config from './config';
 
 const basePath = cwd();
@@ -66,7 +66,7 @@ export const executePreviewGeneration = () => {
         const nft = _data[index];
         const image = new Image();
         image.src =
-          dotProp.get<string>(
+          getProperty<Metadata, string>(
             nft,
             config.metadataSchemaMapper.base64SvgDataUri
           ) || '';
@@ -76,7 +76,10 @@ export const executePreviewGeneration = () => {
       for (let index = 0; index < _data.length; index++) {
         const nft = _data[index];
         const fileName = config.metadataSchemaMapper.edition
-          ? dotProp.get<string>(nft, config.metadataSchemaMapper.edition)
+          ? getProperty<Metadata, string>(
+              nft,
+              config.metadataSchemaMapper.edition
+            )
           : index + 1;
         try {
           const image = await loadImage(

@@ -5,7 +5,7 @@ import { createHash } from 'crypto';
 import { createCanvas, Image, loadImage } from 'canvas';
 import { imgToSvg } from './img-to-svg';
 import { optimize, OptimizedSvg } from 'svgo';
-import * as dotProp from 'dot-prop';
+import { getProperty, setProperty } from 'dot-prop';
 import config from './config';
 
 interface LayerElement {
@@ -58,9 +58,15 @@ const dnaList = new Set();
 const getSortedMetadata = (metadataList: TempMetadata[]) => {
   return metadataList.sort((a, b) => {
     const first =
-      dotProp.get<number>(a, config.metadataSchemaMapper.edition) || 0;
+      getProperty<TempMetadata, string>(
+        a,
+        config.metadataSchemaMapper.edition
+      ) || 0;
     const second =
-      dotProp.get<number>(b, config.metadataSchemaMapper.edition) || 0;
+      getProperty<TempMetadata, string>(
+        b,
+        config.metadataSchemaMapper.edition
+      ) || 0;
     return first - second;
   });
 };
@@ -165,36 +171,36 @@ const prepareMetadataAndAssets = (_edition: number) => {
 
   const tempMetadata = {};
 
-  dotProp.set(
+  setProperty(
     tempMetadata,
     config.metadataSchemaMapper.name,
     `${editionNameFormat}${_edition}`
   );
-  dotProp.set(
+  setProperty(
     tempMetadata,
     config.metadataSchemaMapper.description,
     description
   );
-  dotProp.set(tempMetadata, config.metadataSchemaMapper.edition, _edition);
-  dotProp.set(
+  setProperty(tempMetadata, config.metadataSchemaMapper.edition, _edition);
+  setProperty(
     tempMetadata,
     config.metadataSchemaMapper.attributes,
     attributesList
   );
-  dotProp.set(tempMetadata, config.metadataSchemaMapper.tags, config.tags);
-  dotProp.set(
+  setProperty(tempMetadata, config.metadataSchemaMapper.tags, config.tags);
+  setProperty(
     tempMetadata,
     config.metadataSchemaMapper['image.href'],
     !svgBase64DataOnly ? image : ''
   );
-  dotProp.set(
+  setProperty(
     tempMetadata,
     config.metadataSchemaMapper['image.hash'],
     hash.digest('hex')
   );
 
   if (svgBase64DataOnly) {
-    dotProp.set(
+    setProperty(
       tempMetadata,
       config.metadataSchemaMapper.base64SvgDataUri,
       (
@@ -304,7 +310,7 @@ const getProvenanceHash = () => {
 
   const hashes = getSortedMetadata(metadataList)
     .map((metadataObj) =>
-      dotProp.get<string>(
+      getProperty<TempMetadata, string>(
         metadataObj,
         config.metadataSchemaMapper['image.hash']
       )
