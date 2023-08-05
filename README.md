@@ -39,7 +39,7 @@ nft-art-maker tool doesn't assume any way of uploading to ipfs, but I would reco
 - [Try the example](#try-the-example)
 
 #### How to use it:
-- minimum version of Node is **14.14.0** doesn't work with Node **18** yet. Please use LTS version for now.
+- minimum version of Node is **14.14.0**. Best **18**.
 - create a project directory -> `mkdir my-nft-collection ; cd my-nft-collection`
 - in that directory, create the `layers` directory with all of your layers split into proper directories. Read more about it below.
 - create a configuration file `.nftartmakerrc` (other file names also allowed, check out [cosmiconfig](https://github.com/davidtheclark/cosmiconfig) for more info). This file should be a JSON formatted config file. You'll find all configuration options below.

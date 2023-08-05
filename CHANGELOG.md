@@ -1,3 +1,6 @@
+### [6.0.1](https://github.com/juliancwirko/nft-art-maker/releases/tag/v6.0.1) (2023-08-05)
+- update canvas lib to be compatible with Node 18
+
 ### [6.0.0](https://github.com/juliancwirko/nft-art-maker/releases/tag/v6.0.0) (2022-08-07)
 - update dependencies
 - changed the build process, to be able to use the newest versions of dependencies. This is why it is a major version

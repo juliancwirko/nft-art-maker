@@ -5,7 +5,7 @@
   },
   "type": "module",
   "types": "build/types",
-  "version": "6.0.0",
+  "version": "6.0.1",
   "description": "NFT Art Maker - generates images and metadata files and packs them into IPFS CAR files, all from provided PNG layers.",
   "main": "build/index.js",
   "bin": {
@@ -51,7 +51,7 @@
   },
   "dependencies": {
     "@ipld/car": "^4.1.4",
-    "canvas": "^2.9.3",
+    "canvas": "^2.11.2",
     "cosmiconfig": "^7.0.1",
     "dot-prop": "^7.2.0",
     "ipfs-car": "^0.8.1",
